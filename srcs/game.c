@@ -24,7 +24,7 @@ static int        map_drawing(t_game game)
 void        game_init(t_game game)
 {
     game.mlx = mlx_init();
-	game.window = mlx_new_window(game.mlx, 800, 450, "Wolf3D");
+	game.window = mlx_new_window(game.mlx, SCREEN_WIDTH, SCREEN_HEIGTH, "Wolf3D");
 	mlx_key_hook(game.window, key_handle, &game);
     mlx_loop_hook(game.mlx, map_drawing, &game);
 	mlx_loop(game.mlx);
