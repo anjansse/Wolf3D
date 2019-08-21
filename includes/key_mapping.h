@@ -64,6 +64,8 @@ typedef struct			s_key_dispatch
 
 extern t_key_dispatch	g_key[];
 
+int						key_handle(int key, void *param);
+
 #endif /* !KEY_MAPPING_H */
 
 /* EOF */

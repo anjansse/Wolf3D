@@ -28,6 +28,8 @@ typedef struct      s_vector
     double          y;
 }                   t_vector;
 
+void                game_init(t_game game);
+
 #endif /* !WOLF_H */
 
 /* EOF */
