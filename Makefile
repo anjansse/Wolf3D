@@ -11,7 +11,7 @@ INCLUDES	= -I includes \
 LIB			= -L libft/ -lft \
 			  -L minilibx/ -lmlx -framework OpenGL -framework AppKit
 
-COMMON		= main.c
+COMMON		= main.c game.c key.c
 
 FUNCTIONS	= $(addprefix srcs/, $(COMMON))
 OBJECTS		= $(FUNCTIONS:.c=.o)
