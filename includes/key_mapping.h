@@ -1,7 +1,7 @@
 #ifndef KEY_MAPPING_H
 # define KEY_MAPPING_H
 
-#include <stdlib.h>
+# include <stdlib.h>
 
 /*
 ** KEY - Special

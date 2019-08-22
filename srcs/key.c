@@ -8,6 +8,7 @@ int		key_fct(void *param)
 
 int		key_fct_esc(void *param)
 {
+	mlx_destroy_image(((t_game *)param)->mlx, ((t_game *)param)->image);
 	mlx_clear_window(((t_game *)param)->mlx, ((t_game *)param)->window);
 	mlx_destroy_window(((t_game *)param)->mlx, ((t_game *)param)->window);
 	exit(EXIT_SUCCESS);
@@ -31,14 +32,13 @@ int		key_handle(int key, void *param)
 	unsigned int	i;
 
 	i = 0;
-	while (i < sizeof(g_key))
+	while (i < sizeof(g_key) / sizeof(t_key_dispatch))
 	{
-		if (g_key[i].key == key)
-		{
-			ft_putendl(g_key[i].name);
+		if (key == g_key[i].key)
 			return (g_key[i].fct(param));
-		}
 		++i;
 	}
 	return (0);
 }
+
+/* EOF */
