@@ -1,7 +1,8 @@
 CC			= gcc
 RM			= rm -f
 NAME		= wolf3d
-CFLAGS		= -Wall -Wextra -Werror
+DEBUG		= -g
+CFLAGS		= -Wall -Wextra -Werror $(DEBUG)
 LIBFT 		= libft/libft.a
 MINILIBX	= minilibx/libmlx.a
 INCLUDES	= -I includes \
@@ -11,7 +12,7 @@ INCLUDES	= -I includes \
 LIB			= -L libft/ -lft \
 			  -L minilibx/ -lmlx -framework OpenGL -framework AppKit
 
-COMMON		= main.c game.c put.c key.c
+COMMON		= main.c game.c put.c key.c free.c file_handle.c
 
 FUNCTIONS	= $(addprefix srcs/, $(COMMON))
 OBJECTS		= $(FUNCTIONS:.c=.o)

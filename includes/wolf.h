@@ -24,7 +24,7 @@
 # define SCREEN_HEIGTH	900
 # define SCREEN_WIDTH	1600
 # define BLOCK_SIZE		64
-# define AUT_CHARS		"01\n"
+# define AUT_CHARS		" 01\n"
 
 /*
 ** Colors
@@ -46,7 +46,6 @@
 **	Access of structure shortcut.
 */
 
-# define 
 # define PLAYER			game->bob
 
 typedef struct		s_vector
@@ -61,12 +60,18 @@ typedef struct		s_player
 	double			direction;
 }					t_player;
 
+typedef struct		s_map
+{
+	int				**map;
+}					t_map;
+
 typedef struct		s_game
 {
 	void			*mlx;
 	void			*window;
 	void			*image;
 	unsigned int	*pixels;
+	t_map			coord;
 	t_player		bob;
 }					t_game;
 
@@ -74,6 +79,10 @@ void				game_init(t_game game);
 void				put_background(t_game game, size_t size);
 void				put_pixel(t_game game, t_vector point, int color);
 void				put_column(t_game game, t_vector point, size_t size, int color);
+void				file_parse(char *filename, t_game *game);
+void				ft_free_db_tab(char **av);
+void				ft_free_db_tab_int(int **av);
+void				send_error(char *str);
 
 #endif /* !WOLF_H */
 
