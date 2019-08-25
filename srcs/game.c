@@ -27,7 +27,7 @@ void			fov_handle(t_game *game)
 {
 	PLAYER.position.x = 2; // add 'P' x position when parser done.
 	PLAYER.position.y = 2; // add 'P' y position when parser done.0
-	PLAYER.direction = 0.0;
+	PLAYER.theta = 0.0;
 	fov_render(game);
 }
 
