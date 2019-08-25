@@ -11,9 +11,6 @@
 # include <stdlib.h>
 # include <unistd.h>
 
-# define MAP_WIDTH	8
-# define MAP_HEIGTH	8
-
 /*
 ** Game constraint
 **		FOV - Field Of View
@@ -24,7 +21,11 @@
 # define SCREEN_HEIGTH	900
 # define SCREEN_WIDTH	1600
 # define BLOCK_SIZE		64
-# define AUT_CHARS		" 01\n"
+
+
+# define FILE_EXTENSION		".wolf"
+# define FILE_CHAR_MAP		"01"
+# define FILE_CHAR_COMMENT	'#'
 
 /*
 ** Colors
@@ -48,6 +49,8 @@
 
 # define PLAYER		game->bob
 
+typedef unsigned char	t_uchar;
+
 typedef struct		s_vector
 {
 	double			x;
@@ -70,11 +73,6 @@ typedef struct		s_player
 	double			theta;
 }					t_player;
 
-typedef struct		s_map
-{
-	int				**map;
-}					t_map;
-
 typedef struct		s_game
 {
 	t_player		bob;
@@ -82,17 +80,21 @@ typedef struct		s_game
 	void			*window;
 	void			*image;
 	unsigned int	*pixels;
-	t_map			coord;
-	t_player		bob;
+	t_uchar			**map;
+	int				x_max;
+	int				y_max;
 }					t_game;
 
 void				game_init(t_game game);
+
 void				put_background(t_game game, size_t size);
 void				put_pixel(t_game game, t_vector point, int color);
 void				put_column(t_game game, t_vector point, size_t size, int color);
-void				file_parse(char *filename, t_game *game);
-void				ft_free_db_tab(char **av);
-void				ft_free_db_tab_int(int **av);
+
+int					parser(char *filename, t_game *game);
+
+int					free_map(t_uchar **map, size_t size);
+
 void				send_error(char *str);
 
 #endif /* !WOLF_H */

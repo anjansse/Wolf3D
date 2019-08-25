@@ -13,7 +13,9 @@ int				main(int ac, char **av)
 	if (ac != 2)
 		send_error("usage: ./wolf3d <map>\n");
 	ft_memset(&game, 0, sizeof(t_game));
-	file_parse(av[1], &game);
+	if (EXIT_FAILURE == parser(av[1], &game))
+		return (1);
+	free_map(game.map, (size_t)game.x_max);
 	// game_init(game);
 	return (0);
 }
