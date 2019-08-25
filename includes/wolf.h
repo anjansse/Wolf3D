@@ -24,6 +24,7 @@
 # define SCREEN_HEIGTH	900
 # define SCREEN_WIDTH	1600
 # define BLOCK_SIZE		64
+# define AUT_CHARS		"01\n"
 
 /*
 ** Colors
@@ -41,6 +42,13 @@
 # define PP_DISTANCE	(SCREEN_WIDTH / 2) / tan(FOV / 2)
 # define PP_UNIT		FOV / SCREEN_WIDTH
 
+/*
+**	Access of structure shortcut.
+*/
+
+# define 
+# define PLAYER			game->bob
+
 typedef struct		s_vector
 {
 	double			x;
@@ -50,7 +58,7 @@ typedef struct		s_vector
 typedef struct		s_player
 {
 	t_vector		position;
-	t_vector		camera;
+	double			direction;
 }					t_player;
 
 typedef struct		s_game
@@ -64,8 +72,8 @@ typedef struct		s_game
 
 void				game_init(t_game game);
 void				put_background(t_game game, size_t size);
-void				put_pixel(t_game game, t_vector p, int color);
-void				put_line(t_game game, t_vector p, size_t size, int color);
+void				put_pixel(t_game game, t_vector point, int color);
+void				put_column(t_game game, t_vector point, size_t size, int color);
 
 #endif /* !WOLF_H */
 

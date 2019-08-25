@@ -15,17 +15,17 @@ void		put_background(t_game game, size_t size)
 	}
 }
 
-void		put_pixel(t_game game, t_vector p, int color)
+void		put_pixel(t_game game, t_vector point, int color)
 {
-	game.pixels[((int)round(p.y) * SCREEN_WIDTH) + (int)round(p.x)] = color;
+	game.pixels[((int)round(point.y) * SCREEN_WIDTH) + (int)round(point.x)] = color;
 }
 
-void		put_line(t_game game, t_vector p, size_t size, int color)
+void		put_column(t_game game, t_vector point, size_t size, int color)
 {
 	while (size)
 	{
-		put_pixel(game, p, color);
-		++p.y;
+		put_pixel(game, point, color);
+		++point.y;
 		--size;
 	}
 }
