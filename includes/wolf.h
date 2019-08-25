@@ -43,11 +43,10 @@
 # define PP_UNIT		FOV / SCREEN_WIDTH
 
 /*
-**	Access of structure shortcut.
+** Access of structure shortcut.
 */
 
-# define 
-# define PLAYER			game->bob
+# define PLAYER		game->bob
 
 typedef struct		s_vector
 {
@@ -55,19 +54,29 @@ typedef struct		s_vector
 	double			y;
 }					t_vector;
 
+/*
+** The Player
+** 	position: vector position on the map;
+** 	theta: angle goes from 0 to 359.9 need to remains positif
+**		   angle   0 means look on the east
+**		   angle  90 means look on the south
+**		   angle 180 means look on the west
+**		   angle 270 means look on the north
+*/
+
 typedef struct		s_player
 {
 	t_vector		position;
-	double			direction;
+	double			theta;
 }					t_player;
 
 typedef struct		s_game
 {
+	t_player		bob;
 	void			*mlx;
 	void			*window;
 	void			*image;
 	unsigned int	*pixels;
-	t_player		bob;
 }					t_game;
 
 void				game_init(t_game game);
