@@ -98,6 +98,8 @@ int					parser(char *filename, t_game *game);
 
 int					free_map(t_uchar **map, size_t size);
 
+double				distance_wall(t_game *game, double theta);
+
 #endif /* !WOLF_H */
 
 /* EOF */

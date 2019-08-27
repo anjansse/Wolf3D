@@ -12,8 +12,10 @@ int				main(int argc, char *argv[])
 	ft_memset(&game, 0, sizeof(t_game));
 	if (EXIT_FAILURE == parser(argv[1], &game))
 		return (EXIT_FAILURE);
+	game_init(game);
+	// REMOVE JUST TO UNDERSTAND
 	free_map(game.map, (size_t)game.x_max);
-	// game_init(game);
+	// END
 	return (EXIT_SUCCESS);
 }
 

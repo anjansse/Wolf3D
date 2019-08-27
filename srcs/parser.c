@@ -70,23 +70,25 @@ static int		parse_map(int fd, t_game *game, int *nbr)
 
 static int		parse_size(int fd, t_game *game, int *nbr)
 {
+	int		ret;
 	char	*ptr;
 	char	*line;
 
 	line = NULL;
+	ret = SUCCESS;
 	parse_get_line(fd, &line, nbr);
 	if ((game->x_max = ft_strtoi(line, &ptr)) <= 0)
-		return (FAILURE);
+		ret = FAILURE;
 	if (*ptr != ' ')
-		return (FAILURE);
+		ret = FAILURE;
 	if ((game->y_max = ft_strtoi(ptr, &ptr)) <= 0)
-		return (FAILURE);
+		ret = FAILURE;
 	while (*ptr && *ptr == ' ')
 		++ptr;
 	if (*ptr && *ptr != FILE_CHAR_COMMENT)
-		return (FAILURE);
+		ret = FAILURE;
 	ft_strdel(&line);
-	return (SUCCESS);
+	return (ret);
 }
 
 int				parser(char *filename, t_game *game)
