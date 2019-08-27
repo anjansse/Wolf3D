@@ -11,6 +11,9 @@
 # include <stdlib.h>
 # include <unistd.h>
 
+# define SUCCESS 0
+# define FAILURE 1
+
 /*
 ** Game constraint
 **		FOV - Field Of View
@@ -94,8 +97,6 @@ void				put_column(t_game game, t_vector point, size_t size, int color);
 int					parser(char *filename, t_game *game);
 
 int					free_map(t_uchar **map, size_t size);
-
-void				send_error(char *str);
 
 #endif /* !WOLF_H */
 

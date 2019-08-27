@@ -1,17 +1,5 @@
 #include "wolf.h"
 
-static int		parse_extension(char *filename)
-{
-	char	*extension;
-
-	extension = ft_strchr(filename, '.');
-	if (extension == NULL)
-		return (EXIT_FAILURE);
-	if (ft_strcmp(extension, FILE_EXTENSION) == 0)
-		return (EXIT_SUCCESS);
-	return (EXIT_FAILURE);
-}
-
 static int		parse_line(t_game *game, char *line, int y)
 {
 	int		i;
@@ -38,43 +26,46 @@ static int		parse_line(t_game *game, char *line, int y)
 	ft_strdel(&line);
 	if (j == 0xFF || i != game->x_max)
 		return (free_map(game->map, y + 1));
-	return (EXIT_SUCCESS);
+	return (SUCCESS);
+}
+
+static void		parse_get_line(int fd, char **str, int *nbr)
+{
+	char	*line;
+
+	line = NULL;
+	while (get_next_line(fd, &line) > 0 && line)
+	{
+		++(*nbr);
+		if (*line && *line != FILE_CHAR_COMMENT)
+			break ;
+		ft_strdel(&line);
+	}
+	*str = line;
 }
 
 static int		parse_map(int fd, t_game *game, int *nbr)
 {
 	int		y;
+	int		ret;
 	char	*line;
 
 	game->map = (t_uchar **)malloc(sizeof(t_uchar *) * game->y_max);
 	if (game->map == NULL)
-		return (EXIT_FAILURE);
+		return (FAILURE);
 	y = 0;
 	while (y < game->y_max)
 	{
+		parse_get_line(fd, &line, nbr);
+		if (FAILURE == parse_line(game, line, y))
+			return (FAILURE);
 		line = NULL;
-		while (get_next_line(fd, &line) > 0 && line)
-		{
-			++(*nbr);
-			if (*line != FILE_CHAR_COMMENT)
-				break ;
-			ft_strdel(&line);
-		}
-		if (EXIT_FAILURE == parse_line(game, line, y))
-			return (EXIT_FAILURE);
 		++y;
 	}
-	while (get_next_line(fd, &line) >= 0 && line)
-	{
-		++(*nbr);
-		if (*line != FILE_CHAR_COMMENT)
-		{
-			ft_strdel(&line);
-			return (EXIT_FAILURE);
-		}
-		ft_strdel(&line);
-	}
-	return (EXIT_SUCCESS);
+	parse_get_line(fd, &line, nbr);
+	ret = (line) ? FAILURE : SUCCESS;
+	ft_strdel(&line);
+	return (ret);
 }
 
 static int		parse_size(int fd, t_game *game, int *nbr)
@@ -83,54 +74,39 @@ static int		parse_size(int fd, t_game *game, int *nbr)
 	char	*line;
 
 	line = NULL;
-	while (get_next_line(fd, &line) > 0)
-	{
-		++(*nbr);
-		if (*line != FILE_CHAR_COMMENT)
-			break ;
-		ft_strdel(&line);
-	}
+	parse_get_line(fd, &line, nbr);
 	if ((game->x_max = ft_strtoi(line, &ptr)) <= 0)
-		return (EXIT_FAILURE);
+		return (FAILURE);
 	if (*ptr != ' ')
-		return (EXIT_FAILURE);
+		return (FAILURE);
 	if ((game->y_max = ft_strtoi(ptr, &ptr)) <= 0)
-		return (EXIT_FAILURE);
+		return (FAILURE);
 	while (*ptr && *ptr == ' ')
 		++ptr;
 	if (*ptr && *ptr != FILE_CHAR_COMMENT)
-		return (EXIT_FAILURE);
+		return (FAILURE);
 	ft_strdel(&line);
-	return (EXIT_SUCCESS);
+	return (SUCCESS);
 }
 
 int				parser(char *filename, t_game *game)
 {
 	int		fd;
+	int		ret;
 	int		line;
 
 	line = 0;
-	if (EXIT_FAILURE == parse_extension(filename))
-		send_error("ERROR: Extension is invalid\n");
 	if (-1 == (fd = open(filename, O_RDONLY)))
 	{
 		ft_printf("ERROR: File can't be openned\n");
-		return (EXIT_FAILURE);
+		return (FAILURE);
 	}
-	if (EXIT_FAILURE == parse_size(fd, game, &line))
-	{
-		close(fd);
+	if (FAILURE == (ret = parse_size(fd, game, &line)))
 		ft_printf("ERROR: Parse error; line %d\n", line);
-		return (EXIT_FAILURE);
-	}
-	if (EXIT_FAILURE == parse_map(fd, game, &line))
-	{
-		close(fd);
+	if (ret == SUCCESS && FAILURE == (ret = parse_map(fd, game, &line)))
 		ft_printf("ERROR: Parse error; line %d\n", line);
-		return (EXIT_FAILURE);
-	}
 	close(fd);
-	return (EXIT_SUCCESS);
+	return (ret);
 }
 
 /* EOF */
