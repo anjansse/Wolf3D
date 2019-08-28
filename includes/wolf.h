@@ -98,6 +98,11 @@ int					parser(char *filename, t_game *game);
 
 int					free_map(t_uchar **map, size_t size);
 
+int					point_is_wall(t_game *game, t_vector point, int *wall);
+void				point_set(t_vector *point, double x, double y);
+void				point_update(t_vector *point, double theta, double x, double y);
+
+
 double				distance_wall(t_game *game, double theta);
 
 #endif /* !WOLF_H */
