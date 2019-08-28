@@ -29,14 +29,12 @@ static double	checking_horizontal(t_game *game, double theta)
 	y = BLOCK_SIZE / 2;
 	point.x = (theta <= 90.0 || theta >= 270.0) ? game->bob.position.x + x : game->bob.position.x - x;
 	point.y = (theta >= 0.0 && theta <= 180.0) ? game->bob.position.y - y : game->bob.position.y + y;
-
-	x = fabs(BLOCK_SIZE / tan(theta * (M_PI / 180)));
-	x = (theta <= 90.0 || theta >= 270.0) ? x : -x;
-	y = (theta >= 0.0 && theta <= 180.0) ? -BLOCK_SIZE : BLOCK_SIZE;
+	x = fabs(BLOCK_SIZE / tan(theta * (M_PI / 180))) + 1.0;
+	y = BLOCK_SIZE + 1.0;
 	while (SUCCESS == point_is_wall(game, point, &wall) && wall == 0)
 	{
-		point.x += x;
-		point.y += y;
+		point.x = (theta <= 90.0 || theta >= 270.0) ? point.x + x : point.x - x;
+		point.y = (theta >= 0.0 && theta <= 180.0) ? point.y - y : point.y + y;
 	}
 	if (wall == 0)
 		return (MAXFLOAT);
@@ -55,14 +53,12 @@ static double	checking_vertical(t_game *game, double theta)
 	y = fabs((BLOCK_SIZE / 2) * tan(theta * (M_PI / 180)));
 	point.x = (theta <= 90.0 || theta >= 270.0) ? game->bob.position.x + x : game->bob.position.x - x;
 	point.y = (theta >= 0.0 && theta <= 180.0) ? game->bob.position.y - y : game->bob.position.y + y;
-
-	y = fabs(BLOCK_SIZE * tan(theta * (M_PI / 180)));
-	x = (theta <= 90.0 || theta >= 270.0) ? BLOCK_SIZE : -BLOCK_SIZE;
-	y = (theta >= 0.0 && theta <= 180.0) ? -y : y;
+	x = BLOCK_SIZE + 1.0;
+	y = fabs(BLOCK_SIZE * tan(theta * (M_PI / 180))) + 1.0;
 	while (SUCCESS == point_is_wall(game, point, &wall) && wall == 0)
 	{
-		point.x += x;
-		point.y += y;
+		point.x = (theta <= 90.0 || theta >= 270.0) ? point.x + x : point.x - x;
+		point.y = (theta >= 0.0 && theta <= 180.0) ? point.y - y : point.y + y;
 	}
 	if (wall == 0)
 		return (MAXFLOAT);
@@ -83,7 +79,7 @@ static double	checking_execption(t_game *game, double theta)
 			point.x += (theta == 0.0) ? BLOCK_SIZE : -BLOCK_SIZE;
 		if (wall == 0)
 			return (MAXFLOAT);
-		return (fabs(game->bob.position.x - point.x) - 3 * BLOCK_SIZE / 2);
+		return (fabs(game->bob.position.x - point.x) - BLOCK_SIZE / 2);
 	}
 	else
 	{
@@ -91,7 +87,7 @@ static double	checking_execption(t_game *game, double theta)
 			point.y += (theta == 90.0) ? -BLOCK_SIZE : BLOCK_SIZE;
 		if (wall == 0)
 			return (MAXFLOAT);
-		return (fabs(game->bob.position.y - point.y) - 3 * BLOCK_SIZE / 2);
+		return (fabs(game->bob.position.y - point.y) - BLOCK_SIZE / 2);
 	}
 }
 
