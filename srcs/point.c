@@ -7,6 +7,7 @@ static int		point_is_wall(t_game *game, t_vector point, int *wall)
 
 	x = (int)(point.x / BLOCK_SIZE);
 	y = (int)(point.y / BLOCK_SIZE);
+	printf("%d | %d\n", x, y);
 	if (0 <= x && x < game->x_max && 0 <= y && y < game->y_max)
 	{
 		if (game->map[y][x] != 0 && wall)
@@ -14,36 +15,6 @@ static int		point_is_wall(t_game *game, t_vector point, int *wall)
 		return (SUCCESS);
 	}
 	return (FAILURE);
-}
-
-static t_vector	checking_first_point(t_vector point, double theta, int horizontal)
-{
-	t_vector	first;
-
-	first.x = point.x;
-	first.y = point.y;
-	if (horizontal)
-	{
-		if (theta == 0.0 || theta == 180.0)
-			first.y = point.y;
-		else if (theta > 0.0)
-			first.y = (floor(point.y / BLOCK_SIZE) * BLOCK_SIZE) - 1;
-		else
-			first.y = (floor(point.y / BLOCK_SIZE) * BLOCK_SIZE) + BLOCK_SIZE;
-		if (theta != 0.0 && theta != 180.0)
-			first.x = point.x + ((point.y - first.y) / tan(theta * (M_PI / 180)));
-	}
-	else
-	{
-		if (theta == 90.0 || theta == -90.0)
-			first.x = point.x;
-		else if (theta < 90.0 && theta > -90.0)
-			first.x = floor((point.x / BLOCK_SIZE) * BLOCK_SIZE) + BLOCK_SIZE;
-		else
-			first.x = floor((point.x / BLOCK_SIZE) * BLOCK_SIZE) - 1;
-		first.y = point.y + ((point.x - first.x) * tan(theta * (M_PI / 180)));
-	}
-	return (first);
 }
 
 static double	checking_horizontal(t_game *game, double theta)
@@ -54,22 +25,22 @@ static double	checking_horizontal(t_game *game, double theta)
 	t_vector	point;
 
 	wall = 0;
-	x = (theta <= 0.0) ? BLOCK_SIZE : -BLOCK_SIZE;
-	y = (theta == 0.0 || theta == 180.0) ? BLOCK_SIZE : BLOCK_SIZE / tan(theta * (M_PI / 180));
-	point = checking_first_point(game->bob.position, theta, 1);
-	while (wall == 0 && SUCCESS == point_is_wall(game, point, &wall))
+	x = fabs((BLOCK_SIZE / 2) / tan(theta * (M_PI / 180)));
+	y = BLOCK_SIZE / 2;
+	point.x = (theta <= 90.0 || theta >= 270.0) ? game->bob.position.x + x : game->bob.position.x - x;
+	point.y = (theta >= 0.0 && theta <= 180.0) ? game->bob.position.y - y : game->bob.position.y + y;
+
+	x = fabs(BLOCK_SIZE / tan(theta * (M_PI / 180)));
+	x = (theta <= 90.0 || theta >= 270.0) ? x : -x;
+	y = (theta >= 0.0 && theta <= 180.0) ? -BLOCK_SIZE : BLOCK_SIZE;
+	while (SUCCESS == point_is_wall(game, point, &wall) && wall == 0)
 	{
-		point.y += (theta == 0.0 || theta == 180.0) ? 0 : y;
-		if (theta == 90.0 || theta == -90.0)
-			point.x = point.x;
-		else
-			point.x = point.x + x;
+		point.x += x;
+		point.y += y;
 	}
 	if (wall == 0)
 		return (MAXFLOAT);
-	if (theta == 90.0 || theta == -90.0)
-		return (fabs(game->bob.position.y - point.y));
-	return (fabs(fabs(game->bob.position.x - point.x) / cos(theta * (M_PI / 180))));
+	return (sqrt(pow(point.x - game->bob.position.x, 2) + pow(point.y - game->bob.position.y, 2)));
 }
 
 static double	checking_vertical(t_game *game, double theta)
@@ -80,22 +51,48 @@ static double	checking_vertical(t_game *game, double theta)
 	t_vector	point;
 
 	wall = 0;
-	x = (theta < 90.0 && theta > -90.0) ? BLOCK_SIZE : -BLOCK_SIZE;
-	y = (theta == 90.0 || theta == -90.0) ? BLOCK_SIZE : BLOCK_SIZE * tan(theta * (M_PI / 180));
-	point = checking_first_point(game->bob.position, theta, 0);
-	while (wall == 0 && SUCCESS == point_is_wall(game, point, &wall))
+	x = BLOCK_SIZE / 2;
+	y = fabs((BLOCK_SIZE / 2) * tan(theta * (M_PI / 180)));
+	point.x = (theta <= 90.0 || theta >= 270.0) ? game->bob.position.x + x : game->bob.position.x - x;
+	point.y = (theta >= 0.0 && theta <= 180.0) ? game->bob.position.y - y : game->bob.position.y + y;
+
+	y = fabs(BLOCK_SIZE * tan(theta * (M_PI / 180)));
+	x = (theta <= 90.0 || theta >= 270.0) ? BLOCK_SIZE : -BLOCK_SIZE;
+	y = (theta >= 0.0 && theta <= 180.0) ? -y : y;
+	while (SUCCESS == point_is_wall(game, point, &wall) && wall == 0)
 	{
-		point.x += (theta == 90.0 || theta == -90.0) ? 0 : x;
-		if (theta == 0.0 || theta == 180.0)
-			point.y = point.y;
-		else
-			point.y = point.y + y;
+		point.x += x;
+		point.y += y;
 	}
 	if (wall == 0)
 		return (MAXFLOAT);
-	if (theta == 90.0 || theta == -90.0)
-		return (fabs(game->bob.position.y - point.y));
-	return (fabs(fabs(game->bob.position.x - point.x) / cos(theta * (M_PI / 180))));
+	return (sqrt(pow(point.x - game->bob.position.x, 2) + pow(point.y - game->bob.position.y, 2)));
+}
+
+static double	checking_execption(t_game *game, double theta)
+{
+	int			wall;
+	t_vector	point;
+
+	wall = 0;
+	point.x = game->bob.position.x;
+	point.y = game->bob.position.y;
+	if (theta == 0.0 || theta == 180.0)
+	{
+		while (SUCCESS == point_is_wall(game, point, &wall) && wall == 0)
+			point.x += (theta == 0.0) ? BLOCK_SIZE : -BLOCK_SIZE;
+		if (wall == 0)
+			return (MAXFLOAT);
+		return (fabs(game->bob.position.x - point.x) - 3 * BLOCK_SIZE / 2);
+	}
+	else
+	{
+		while (SUCCESS == point_is_wall(game, point, &wall) && wall == 0)
+			point.y += (theta == 90.0) ? -BLOCK_SIZE : BLOCK_SIZE;
+		if (wall == 0)
+			return (MAXFLOAT);
+		return (fabs(game->bob.position.y - point.y) - 3 * BLOCK_SIZE / 2);
+	}
 }
 
 double			distance_wall(t_game *game, double theta)
@@ -103,9 +100,12 @@ double			distance_wall(t_game *game, double theta)
 	double	vertical;
 	double	horizontal;
 
-	theta = (theta > 180.0) ? theta - 360.0 : theta;
+	if (theta == 0.0 || theta == 90.0 || theta == 180.0 || theta == 270.0)
+		return (checking_execption(game, theta));
 	horizontal = checking_horizontal(game, theta);
+	printf("\n");
 	vertical = checking_vertical(game, theta);
+	printf("\n%f | %f\n", horizontal, vertical);
 	return ((vertical < horizontal) ? vertical : horizontal);
 }
 
