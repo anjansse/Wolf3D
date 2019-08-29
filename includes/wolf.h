@@ -43,7 +43,7 @@
 
 # define PP_DIMENSION	SCREEN_WIDTH * SCREEN_HEIGTH
 # define PP_CENTER		pp_center();
-# define PP_DISTANCE	(SCREEN_WIDTH / 2) / tan(FOV / 2)
+# define PP_DISTANCE	(SCREEN_WIDTH / 2) / tan(FOV / 2 * M_PI / 180)
 # define PP_UNIT		FOV / SCREEN_WIDTH
 
 /*
@@ -91,8 +91,8 @@ typedef struct		s_game
 void				game_init(t_game game);
 
 void				put_background(t_game game, size_t size);
-void				put_pixel(t_game game, t_vector point, int color);
-void				put_column(t_game game, t_vector point, size_t size, int color);
+void				put_pixel(t_game *game, t_vector point, int color);
+void				put_column(t_game *game, t_vector point, size_t size, int color);
 
 int					parser(char *filename, t_game *game);
 

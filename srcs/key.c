@@ -6,6 +6,24 @@ int		key_fct(void *param)
 	return (0);
 }
 
+int		key_left(void *param)
+{
+	t_game *game;
+
+	game = ((t_game *)param);
+	game->bob.theta = ((game->bob.theta + 1) > 359) ? (game->bob.theta + 1) - 360 : game->bob.theta + 1;
+	return 1;
+}
+
+int		key_right(void *param)
+{
+	t_game *game;
+
+	game = ((t_game *)param);
+	game->bob.theta = ((game->bob.theta - 1) < 0) ? (game->bob.theta - 1) + 360 : game->bob.theta - 1;
+	return (1);
+}
+
 int		key_fct_esc(void *param)
 {
 	mlx_destroy_image(((t_game *)param)->mlx, ((t_game *)param)->image);
@@ -18,8 +36,8 @@ t_key_dispatch	g_key[] = {
 	{KEY_ESC, "ESC", &key_fct_esc},
 	{KEY_UP, "UP", &key_fct},
 	{KEY_DOWN, "DOWN", &key_fct},
-	{KEY_LEFT, "LEFT", &key_fct},
-	{KEY_RIGHT, "RIGHT", &key_fct},
+	{KEY_LEFT, "LEFT", &key_left},
+	{KEY_RIGHT, "RIGHT", &key_right},
 	{KEY_SPACE, "SPACE", &key_fct},
 	{KEY_SHIFT, "SHIFT", &key_fct},
 	{KEY_CMD, "CMD", &key_fct},
@@ -42,3 +60,4 @@ int		key_handle(int key, void *param)
 }
 
 /* EOF */
+

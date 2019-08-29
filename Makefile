@@ -1,7 +1,7 @@
 CC			= gcc
 RM			= rm -f
 NAME		= wolf3d
-DEBUG		= -g
+DEBUG		= -g -fsanitize=address -fsanitize=undefined
 CFLAGS		= -Wall -Wextra -Werror $(DEBUG)
 LIBFT 		= libft/libft.a
 MINILIBX	= minilibx/libmlx.a
