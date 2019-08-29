@@ -34,4 +34,18 @@ void		point_update(t_vector *point, double theta, double x, double y)
 		point->y += y;
 }
 
+void		point_move(t_game *game, t_vector *point, int x, int y)
+{
+	int			wall;
+	double		move;
+	t_vector	tmp;
+
+	wall = 0;
+	move = game->bob.speed * BLOCK_SIZE;
+	point_set(&tmp, point->x, point->y);
+	point_update(&tmp, game->bob.theta, move * x, move * y);
+	if (SUCCESS == point_is_wall(game, tmp, &wall) && wall == 0)
+		point_set(point, tmp.x, tmp.y);
+}
+
 /* EOF */

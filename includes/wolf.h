@@ -25,10 +25,11 @@
 # define SCREEN_WIDTH	1600
 # define BLOCK_SIZE		64
 
-
-# define FILE_EXTENSION		".wolf"
 # define FILE_CHAR_MAP		"01"
 # define FILE_CHAR_COMMENT	'#'
+
+# define PLAYER_SPEED_REG	1.0
+# define PLAYER_SPEED_RUN	1.25
 
 /*
 ** Colors
@@ -73,7 +74,8 @@ typedef struct		s_vector
 typedef struct		s_player
 {
 	t_vector		position;
-	double			theta;
+	float			theta;
+	float			speed;
 }					t_player;
 
 typedef struct		s_game
@@ -98,12 +100,15 @@ int					parser(char *filename, t_game *game);
 
 int					free_map(t_uchar **map, size_t size);
 
+int					key_press(int key, void *param);
+int					key_release(int key, void *param);
+
 int					point_is_wall(t_game *game, t_vector point, int *wall);
 void				point_set(t_vector *point, double x, double y);
 void				point_update(t_vector *point, double theta, double x, double y);
+void				point_move(t_game *game, t_vector *point, int x, int y);
 
-
-double				distance_wall(t_game *game, double theta);
+double				wall_distance(t_game *game, float theta);
 
 #endif /* !WOLF_H */
 

@@ -1,6 +1,6 @@
 #include "wolf.h"
 
-static double	wall_execption(t_game *game, t_vector player, double theta)
+static double	wall_execption(t_game *game, t_vector player, float theta)
 {
 	int			wall;
 	t_vector	point;
@@ -25,7 +25,7 @@ static double	wall_execption(t_game *game, t_vector player, double theta)
 	}
 }
 
-static double	wall_horizontal(t_game *game, t_vector player, double theta)
+static double	wall_horizontal(t_game *game, t_vector player, float theta)
 {
 	int			wall;
 	double		x;
@@ -43,7 +43,7 @@ static double	wall_horizontal(t_game *game, t_vector player, double theta)
 	return (sqrt(pow(point.x - player.x, 2) + pow(point.y - player.y, 2)));
 }
 
-static double	wall_vertical(t_game *game, t_vector player, double theta)
+static double	wall_vertical(t_game *game, t_vector player, float theta)
 {
 	int			wall;
 	double		y;
@@ -61,7 +61,7 @@ static double	wall_vertical(t_game *game, t_vector player, double theta)
 	return (sqrt(pow(point.x - player.x, 2) + pow(point.y - player.y, 2)));
 }
 
-double			distance_wall(t_game *game, double theta)
+double			wall_distance(t_game *game, float theta)
 {
 	double		vertical;
 	double		horizontal;
