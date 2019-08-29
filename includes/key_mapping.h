@@ -58,11 +58,8 @@
 typedef struct			s_key_dispatch
 {
 	int					key;
-	char				*name;
-	int					(*fct)(void *param);
+	int					(*fct)(int key, void *param, int release);
 }						t_key_dispatch;
-
-extern t_key_dispatch	g_key[];
 
 int						key_handle(int key, void *param);
 

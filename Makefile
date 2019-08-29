@@ -12,9 +12,10 @@ INCLUDES	= -I includes \
 LIB			= -L libft/ -lft \
 			  -L minilibx/ -lmlx -framework OpenGL -framework AppKit
 
-COMMON		= main.c game.c put.c key.c free.c parser.c point.c
+MAIN		= main.c game.c put.c key.c point.c wall.c
+UTILITIES	= parser.c free.c
 
-FUNCTIONS	= $(addprefix srcs/, $(COMMON))
+FUNCTIONS	= $(addprefix srcs/, $(MAIN) $(UTILITIES))
 OBJECTS		= $(FUNCTIONS:.c=.o)
 
 .PHONY: all $(NAME) clean fclean re

@@ -22,11 +22,23 @@ void		put_pixel(t_game *game, t_vector point, int color)
 
 void		put_column(t_game *game, t_vector point, size_t size, int color)
 {
-	while (size)
+	size_t tmp;
+
+	tmp = size / 2;
+	point.y = SCREEN_HEIGTH / 2;
+	while (tmp)
 	{
 		put_pixel(game, point, color);
 		++point.y;
-		--size;
+		--tmp;
+	}
+	tmp = size / 2;
+	point.y = SCREEN_HEIGTH / 2;
+	while (tmp)
+	{
+		put_pixel(game, point, color);
+		--point.y;
+		--tmp;
 	}
 }
 
