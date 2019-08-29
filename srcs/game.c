@@ -14,6 +14,7 @@ void			player_init(t_player *player, int x, int y, float theta)
 ** and handles it appropriately.
 */
 
+
 static void		display_walls(t_game *game)
 {
 	t_vector	point;	

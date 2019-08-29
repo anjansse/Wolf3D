@@ -19,6 +19,7 @@ int		key_left(int key, void *param, int release)
 	return 1;
 }
 
+
 int		key_right(int key, void *param, int release)
 {
 	(void)key;
