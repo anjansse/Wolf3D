@@ -88,11 +88,12 @@ typedef struct		s_game
 	t_uchar			**map;
 	int				x_max;
 	int				y_max;
+	unsigned char	should_draw;
 }					t_game;
 
 void				game_init(t_game game);
 
-void				put_background(t_game game, size_t size);
+void				put_background(t_game *game, size_t size);
 void				put_pixel(t_game *game, t_vector point, int color);
 void				put_column(t_game *game, t_vector point, size_t size, int color);
 
@@ -106,7 +107,7 @@ int					key_release(int key, void *param);
 int					point_is_wall(t_game *game, t_vector point, int *wall);
 void				point_set(t_vector *point, double x, double y);
 void				point_update(t_vector *point, double theta, double x, double y);
-void				point_move(t_game *game, t_vector *point, int x, int y);
+void				point_move(t_game *game, t_vector *point, double x, double y);
 
 double				wall_distance(t_game *game, float theta);
 

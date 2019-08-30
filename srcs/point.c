@@ -34,7 +34,7 @@ void		point_update(t_vector *point, double theta, double x, double y)
 		point->y += y;
 }
 
-void		point_move(t_game *game, t_vector *point, int x, int y)
+void		point_move(t_game *game, t_vector *point, double x, double y)
 {
 	int			wall;
 	double		move;

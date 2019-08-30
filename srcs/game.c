@@ -14,10 +14,12 @@ void			player_init(t_player *player, int x, int y, float theta)
 ** and handles it appropriately.
 */
 
-
 static void		display_walls(t_game *game)
 {
-	t_vector	point;	
+	t_vector	point;
+	static int	verif = 0;
+	int			color;
+	//  = {0xFF0C00, 0xB9FF00, 0x00FFE0, 0xA600FF};
 	double 		fov_angle;
 	double		fov_min;
 	double		fov_max;
@@ -28,18 +30,18 @@ static void		display_walls(t_game *game)
 	fov_min = 0.0;
 	fov_max = 60.0;
 	fov_angle = (game->bob.theta - 30 >= 0) ? (game->bob.theta - 30) : (game->bob.theta - 30) + 360;
-	printf("theta: %f\tfov_angle: %f\tfov_max: %f\n", game->bob.theta, fov_angle, fov_max);
+	// printf("theta: %f\tfov_angle: %f\tfov_max: %f\n", game->bob.theta, fov_angle, fov_max);
 	while (fov_min < fov_max)
 	{
+		color = (wall_distance(game, fov_angle) < distance) ? 0xFF0C00 : 0xB9FF00;
 		distance = wall_distance(game, fov_angle);
-		// printf("\x1b[91mdistance:\t%f\x1b[0m\n", distance);
-		put_column(game, point, (64.0 / distance) * PP_DISTANCE, 0xFF0C00);
+		put_column(game, point, (64.0 / distance) * PP_DISTANCE, color);
 		fov_angle = (fov_angle + (double)PP_UNIT > 360) ? (fov_angle + (double)PP_UNIT) - 360 : fov_angle + (double)PP_UNIT;
 		fov_min += (double)PP_UNIT;
 		point.x++;
-		// printf("\x1b[91mPP_UNIT: %f\tfov_angle: %f\tdistance: %f\tx: %f\x1b[0m\n", (double)PP_UNIT, fov_angle, distance, point.x);
 	}
 	mlx_put_image_to_window(game->mlx, game->window, game->image, 0, 0);
+	verif = 1;
 }
 
 /*
@@ -49,7 +51,12 @@ static void		display_walls(t_game *game)
 
 int				display_map(t_game *game)
 {
-	display_walls(game);
+	if (game->should_draw == 1)
+	{
+		put_background(game, PP_DIMENSION);
+		display_walls(game);
+	}
+	game->should_draw = 0;
 	return (1);
 }
 
@@ -69,7 +76,8 @@ void			game_init(t_game game)
 	game.window = mlx_new_window(game.mlx, SCREEN_WIDTH, SCREEN_HEIGTH, "Wolf3D");
 	game.image = mlx_new_image(game.mlx, SCREEN_WIDTH, SCREEN_HEIGTH);
 	game.pixels = (unsigned int *)mlx_get_data_addr(game.image, &pixels, &size_line, &endian);
-	put_background(game, SCREEN_WIDTH * SCREEN_HEIGTH);
+	game.should_draw = 1;
+	put_background(&game, PP_DIMENSION);
 	player_init(&(game.bob), 2, 3, 0.0);
 	distance = wall_distance(&game, game.bob.theta);
 	mlx_put_image_to_window(game.mlx, game.window, game.image, 0, 0);
