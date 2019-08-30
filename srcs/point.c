@@ -5,13 +5,17 @@ int			point_is_wall(t_game *game, t_vector point, int *wall)
 	int		x;
 	int		y;
 
-	x = (int)(point.x / BLOCK_SIZE);
-	y = (int)(point.y / BLOCK_SIZE);
-	if (0 <= x && x < game->x_max && 0 <= y && y < game->y_max)
+	if (point.x < 150000) 
 	{
-		if (game->map[y][x] != 0 && wall)
-			*wall = 1;
-		return (SUCCESS);
+		x = (int)(point.x / BLOCK_SIZE);
+		y = (int)(point.y / BLOCK_SIZE);
+		if (0 <= x && x < game->x_max && 0 <= y && y < game->y_max)
+		{
+			if (game->map[y][x] != 0 && wall)
+				*wall = 1;
+			return (SUCCESS);
+		}
+		return (FAILURE);
 	}
 	return (FAILURE);
 }

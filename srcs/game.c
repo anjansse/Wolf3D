@@ -18,8 +18,7 @@ static void		display_walls(t_game *game)
 {
 	t_vector	point;
 	static int	verif = 0;
-	int			color;
-	//  = {0xFF0C00, 0xB9FF00, 0x00FFE0, 0xA600FF};
+	int			color[4] = {0xFF0C00, 0xB9FF00, 0x00FFE0, 0xA600FF};
 	double 		fov_angle;
 	double		fov_min;
 	double		fov_max;
@@ -33,9 +32,9 @@ static void		display_walls(t_game *game)
 	// printf("theta: %f\tfov_angle: %f\tfov_max: %f\n", game->bob.theta, fov_angle, fov_max);
 	while (fov_min < fov_max)
 	{
-		color = (wall_distance(game, fov_angle) < distance) ? 0xFF0C00 : 0xB9FF00;
-		distance = wall_distance(game, fov_angle);
-		put_column(game, point, (64.0 / distance) * PP_DISTANCE, color);
+		// color = (fov_min >= 29 && fov_min <= 30) ? 0xFF0C00 : 0xB9FF00;
+		distance = wall_distance(game, fov_angle) * cos((30.0 - fov_min) * M_PI / 180);
+		put_column(game, point, (64 / distance) * PP_DISTANCE, color[0]);
 		fov_angle = (fov_angle + (double)PP_UNIT > 360) ? (fov_angle + (double)PP_UNIT) - 360 : fov_angle + (double)PP_UNIT;
 		fov_min += (double)PP_UNIT;
 		point.x++;

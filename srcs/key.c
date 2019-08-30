@@ -41,7 +41,7 @@ int		key_fct_arrow(int key, void *param, int release)
 	game = (t_game *)param;
 	player = &(game->bob);
 	if (key == KEY_W)
-		point_move(game, &(player->position), 0.1, 0);
+		point_move(game, &(player->position), 1, 0);
 	else if (key == KEY_S)
 		point_move(game, &(player->position), -1, 0);
 	else if (key == KEY_D)

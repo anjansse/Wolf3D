@@ -71,6 +71,12 @@ typedef struct		s_vector
 **		   angle 270 means look on the north
 */
 
+// typedef struct		s_map
+// {
+// 	t_uchar			c;
+// 	int				texture;
+// }					t_map;
+
 typedef struct		s_player
 {
 	t_vector		position;
@@ -88,7 +94,8 @@ typedef struct		s_game
 	t_uchar			**map;
 	int				x_max;
 	int				y_max;
-	unsigned char	should_draw;
+	t_uchar			color;
+	t_uchar			should_draw;
 }					t_game;
 
 void				game_init(t_game game);
