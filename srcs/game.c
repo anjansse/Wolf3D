@@ -18,7 +18,7 @@ static void		display_walls(t_game *game)
 {
 	t_vector	point;
 	static int	verif = 0;
-	int			color[4] = {0xFF0C00, 0xB9FF00, 0x00FFE0, 0xA600FF};
+	int			color[5] = {0xD8D8DE, 0xFF0C00, 0xB9FF00, 0x00FFE0, 0xA600FF};
 	double 		fov_angle;
 	double		fov_min;
 	double		fov_max;

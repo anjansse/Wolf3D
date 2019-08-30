@@ -8,7 +8,7 @@ int		key_fct(int key, void *param, int release)
 	return (0);
 }
 
-int		key_right(int key, void *param, int release)
+int		key_left_right(int key, void *param, int release)
 {
 	(void)key;
 	(void)release;
@@ -16,21 +16,24 @@ int		key_right(int key, void *param, int release)
 
 	game = ((t_game *)param);
 	game->should_draw = 1;
-	game->bob.theta = ((game->bob.theta + 10) > 359) ? (game->bob.theta + 10) - 360 : game->bob.theta + 10;
+	if (key == KEY_RIGHT)
+		game->bob.theta = ((game->bob.theta + 10) > 359) ? (game->bob.theta + 10) - 360 : game->bob.theta + 10;
+	else if (key == KEY_LEFT)
+		game->bob.theta = ((game->bob.theta - 10) < 0) ? (game->bob.theta - 10) + 360 : game->bob.theta - 10;
 	return 1;
 }
 
-int		key_left(int key, void *param, int release)
-{
-	(void)key;
-	(void)release;
-	t_game *game;
+// int		key_left(int key, void *param, int release)
+// {
+// 	(void)key;
+// 	(void)release;
+// 	t_game *game;
 
-	game = ((t_game *)param);
-	game->should_draw = 1;
-	game->bob.theta = ((game->bob.theta - 10) < 0) ? (game->bob.theta - 10) + 360 : game->bob.theta - 10;
-	return (1);
-}
+// 	game = ((t_game *)param);
+// 	game->should_draw = 1;
+// 	game->bob.theta = ((game->bob.theta - 10) < 0) ? (game->bob.theta - 10) + 360 : game->bob.theta - 10;
+// 	return (1);
+// }
 
 int		key_fct_arrow(int key, void *param, int release)
 {
@@ -41,13 +44,13 @@ int		key_fct_arrow(int key, void *param, int release)
 	game = (t_game *)param;
 	player = &(game->bob);
 	if (key == KEY_W)
-		point_move(game, &(player->position), 1, 0);
+		point_move(game, &(player->position), 1.0, 0.0);
 	else if (key == KEY_S)
-		point_move(game, &(player->position), -1, 0);
+		point_move(game, &(player->position), -1.0, 0.0);
 	else if (key == KEY_D)
-		point_move(game, &(player->position), 0, 1);
+		point_move(game, &(player->position), 0.0, 1.0);
 	else if (key == KEY_A)
-		point_move(game, &(player->position), 0, -1);
+		point_move(game, &(player->position), 0.0, -1.0);
 game->should_draw = 1;
 	return (0);
 }
@@ -90,8 +93,8 @@ int		key_press(int key, void *param)
 		{KEY_A, &key_fct_arrow},
 		{KEY_D, &key_fct_arrow},
 		{KEY_SHIFT, &key_fct_shift},
-		{KEY_RIGHT, &key_right},
-		{KEY_LEFT, &key_left},
+		{KEY_RIGHT, &key_left_right},
+		{KEY_LEFT, &key_left_right},
 	};
 
 	i = 0;

@@ -35,8 +35,8 @@
 ** Colors
 */
 
-# define SKY			0xCDE5FC
-# define FLOOR			0xFFCC99
+# define SKY			0x151A4F
+# define FLOOR			0x4E4E4F
 
 /*
 ** Game parameters
