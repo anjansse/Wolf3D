@@ -24,6 +24,7 @@
 # define SCREEN_HEIGTH	900
 # define SCREEN_WIDTH	1600
 # define BLOCK_SIZE		64
+# define NB_TEXTURES	2
 
 # define FILE_CHAR_MAP		"01"
 # define FILE_CHAR_COMMENT	'#'
@@ -94,11 +95,12 @@ typedef struct		s_game
 	t_uchar			**map;
 	int				x_max;
 	int				y_max;
-	t_uchar			color;
+	void			*texture;
 	t_uchar			should_draw;
 }					t_game;
 
 void				game_init(t_game game);
+void				get_texture(t_game *game);
 
 void				put_background(t_game *game, size_t size);
 void				put_pixel(t_game *game, t_vector point, int color);
@@ -117,6 +119,7 @@ void				point_update(t_vector *point, double theta, double x, double y);
 void				point_move(t_game *game, t_vector *point, double x, double y);
 
 double				wall_distance(t_game *game, float theta);
+// double				get_distance(t_game *game, double angle)
 
 #endif /* !WOLF_H */
 

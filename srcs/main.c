@@ -1,5 +1,14 @@
 #include "wolf.h"
 
+void			get_texture(t_game *game)
+{
+	(void)game;
+// 	printf("Line : %c\n", (unsigned char)game->texture);
+	read_file("/resources/wall_texture/wall31.bmp", &game->texture);
+// 	read_file("test.wolf", &(game->texture));
+// 	printf("Line : %c\n", (unsigned char)game->texture);
+}
+
 int				main(int argc, char *argv[])
 {
 	t_game		game;

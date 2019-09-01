@@ -29,11 +29,13 @@ static void		display_walls(t_game *game)
 	fov_min = 0.0;
 	fov_max = 60.0;
 	fov_angle = (game->bob.theta - 30 >= 0) ? (game->bob.theta - 30) : (game->bob.theta - 30) + 360;
+	// printf("Player Pos:\nX = %f\tY = %f\n", game->bob.position.x, game->bob.position.y);
 	// printf("theta: %f\tfov_angle: %f\tfov_max: %f\n", game->bob.theta, fov_angle, fov_max);
 	while (fov_min < fov_max)
 	{
 		// color = (fov_min >= 29 && fov_min <= 30) ? 0xFF0C00 : 0xB9FF00;
 		distance = wall_distance(game, fov_angle) * cos((30.0 - fov_min) * M_PI / 180);
+		// printf("angle(%f) || REALangle(%f) = distance-> %f\twall distance-> %f\n", fov_min, fov_angle, distance, wall_distance(game, fov_angle));
 		put_column(game, point, (64 / distance) * PP_DISTANCE, color[0]);
 		fov_angle = (fov_angle + (double)PP_UNIT > 360) ? (fov_angle + (double)PP_UNIT) - 360 : fov_angle + (double)PP_UNIT;
 		fov_min += (double)PP_UNIT;
@@ -71,6 +73,7 @@ void			game_init(t_game game)
 	int		size_line;
 	int		endian;
 
+	get_texture(&game);
 	game.mlx = mlx_init();
 	game.window = mlx_new_window(game.mlx, SCREEN_WIDTH, SCREEN_HEIGTH, "Wolf3D");
 	game.image = mlx_new_image(game.mlx, SCREEN_WIDTH, SCREEN_HEIGTH);
