@@ -38,15 +38,15 @@ static uint8_t	wall_hit(t_game *game, t_point *map, t_vector *side, t_vector *de
 
 static uint8_t	dda(t_game *game, t_vector *ray, t_point *map, double x)
 {
-	double		camera;
+	double		angle;
 	uint8_t		range;
 	t_vector	side;
 	t_vector	delta;
 
-	camera = 2 * x / SCREEN_WIDTH - 1;
-	point_set(map, PLAYER_POS.x, PLAYER_POS.y);
-	vector_set(ray, PLAYER_DIR.x + PLAYER_PL.x * camera, PLAYER_DIR.y + PLAYER_PL.y * camera);
-	vector_set(&delta, fabs(1 / ray->x), fabs(1 / ray->y));
+	angle = 2 * x / SCREEN_WIDTH - 1;
+	vector_update(ray, PLAYER_PL.x * angle, PLAYER_PL.y * angle);
+	vector_set(&delta, (ray->x == 0.0) ? 1.0 : fabs(1 / ray->x), 0.0);
+	vector_set(&delta, delta.x, (ray->y == 0.0) ? 1.0 : fabs(1 / ray->y));
 	game->step.x = (ray->x < 0) ? -1 : 1;
 	game->step.y = (ray->y < 0) ? -1 : 1;
 	if (ray->x < 0)
@@ -77,6 +77,8 @@ static void		display_walls(t_game *game)
 	point_set(&point, 0, 0);
 	while (point.x < SCREEN_WIDTH)
 	{
+		point_set(&map, PLAYER_POS.x, PLAYER_POS.y);
+		vector_set(&ray, PLAYER_DIR.x, PLAYER_DIR.y);
 		range = dda(game, &ray, &map, point.x);
 		distance = SCREEN_HEIGTH;
 		if (range == 0)
@@ -95,14 +97,12 @@ static void		display_walls(t_game *game)
 
 int				display_map(t_game *game)
 {
-	if (game->draw == 1)
-	{
-		put_background(game, PP_DIMENSION);
-		display_walls(game);
-		mlx_put_image_to_window(game->mlx, game->window, game->image, 0, 0);
-	}
-	game->draw = 0;
-	return (1);
+	player_rotation(game);
+	player_movement(game);
+	put_background(game, PP_DIMENSION);
+	display_walls(game);
+	mlx_put_image_to_window(game->mlx, game->window, game->image, 0, 0);
+	return (SUCCESS);
 }
 
 /*

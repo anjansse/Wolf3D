@@ -64,9 +64,20 @@ typedef struct		s_player
 	float			speed;
 }					t_player;
 
+typedef struct		s_move
+{
+	uint8_t			front;
+	uint8_t			back;
+	uint8_t			left;
+	uint8_t			rigth;
+	uint8_t			l_rotate;
+	uint8_t			r_rotate;
+}					t_move;
+
 typedef struct		s_game
 {
 	t_player		bob;
+	t_move			move;
 	t_point			step;
 	void			*mlx;
 	void			*window;
@@ -94,10 +105,12 @@ int					key_press(int key, void *param);
 int					key_release(int key, void *param);
 
 void				point_set(t_point *point, int x, int y);
-void				point_update(t_point *point, int x, int y);
 void				vector_set(t_vector *point, double x, double y);
 void				vector_update(t_vector *point, double x, double y);
+
 void				player_set(t_player *player, int x, int y);
+void				player_rotation(t_game *game);
+void				player_movement(t_game *game);
 
 #endif /* !WOLF_H */
 
