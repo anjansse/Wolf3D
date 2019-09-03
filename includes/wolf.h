@@ -16,7 +16,8 @@
 # define FAILURE 1
 
 # define FOV			0.60
-# define ROTATION_SPEED	0.0625
+# define SPEED_ROTATION	0.0625
+# define SPEED_MOVEMENT	0.125
 # define SCREEN_HEIGTH	900
 # define SCREEN_WIDTH	1600
 # define PP_DIMENSION	SCREEN_WIDTH * SCREEN_HEIGTH
@@ -24,8 +25,8 @@
 # define FILE_CHAR_MAP		"01"
 # define FILE_CHAR_COMMENT	'#'
 
-# define PLAYER_SPEED_REG	0.125
-# define PLAYER_SPEED_RUN	0.5
+# define PLAYER_SPEED_REG	0.5
+# define PLAYER_SPEED_RUN	0.875
 
 /*
 ** Colors
@@ -41,6 +42,7 @@
 # define PLAYER_POS		game->bob.pos
 # define PLAYER_DIR		game->bob.dir
 # define PLAYER_PL		game->bob.plane
+# define PLAYER_SPEED	game->bob.speed
 
 typedef struct		s_point
 {
@@ -92,7 +94,9 @@ int					key_press(int key, void *param);
 int					key_release(int key, void *param);
 
 void				point_set(t_point *point, int x, int y);
+void				point_update(t_point *point, int x, int y);
 void				vector_set(t_vector *point, double x, double y);
+void				vector_update(t_vector *point, double x, double y);
 void				player_set(t_player *player, int x, int y);
 
 #endif /* !WOLF_H */

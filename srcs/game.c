@@ -123,7 +123,7 @@ void			game_init(t_game game)
 	game.draw = 1;
 	player_set(&(game.bob), 3, 3);
 	mlx_hook(game.window, 2, 0, key_press, &game);
-	// mlx_hook(game.window, 3, 0, key_release, &game);
+	mlx_hook(game.window, 3, 0, key_release, &game);
 	mlx_loop_hook(game.mlx, display_map, &game);
 	mlx_loop(game.mlx);
 }
