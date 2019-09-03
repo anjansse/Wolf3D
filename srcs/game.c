@@ -120,7 +120,6 @@ void			game_init(t_game game)
 	game.window = mlx_new_window(game.mlx, SCREEN_WIDTH, SCREEN_HEIGTH, "Wolf3D");
 	game.image = mlx_new_image(game.mlx, SCREEN_WIDTH, SCREEN_HEIGTH);
 	game.pixels = (uint32_t *)mlx_get_data_addr(game.image, &pixels, &size_line, &endian);
-	game.draw = 1;
 	player_set(&(game.bob), 3, 3);
 	mlx_hook(game.window, 2, 0, key_press, &game);
 	mlx_hook(game.window, 3, 0, key_release, &game);

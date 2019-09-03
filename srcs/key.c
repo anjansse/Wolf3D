@@ -2,31 +2,31 @@
 
 static int	key_movement(int key, void *param, int release)
 {
-	t_game	*game;
+	uint8_t	*game;
 
-	game = (t_game *)param;
+	game = &((t_game *)param)->move;
 	if (key == KEY_W)
-		game->move.front = (release) ? 0 : 1;
+		*game = (release) ? *game ^ MOVE_FRONT : *game | MOVE_FRONT;
 	if (key == KEY_S)
-		game->move.back = (release) ? 0 : 1;
+		*game = (release) ? *game ^ MOVE_BACK : *game | MOVE_BACK;
 	if (key == KEY_A)
-		game->move.left = (release) ? 0 : 1;
+		*game = (release) ? *game ^ MOVE_LEFT : *game | MOVE_LEFT;
 	if (key == KEY_D)
-		game->move.rigth = (release) ? 0 : 1;
+		*game = (release) ? *game ^ MOVE_RIGHT : *game | MOVE_RIGHT;
 	if (key == KEY_SHIFT)
-		game->bob.speed = (release) ? PLAYER_SPEED_REG : PLAYER_SPEED_RUN;
+		((t_game *)param)->bob.speed = (release) ? PLAYER_SPEED_REG : PLAYER_SPEED_RUN;
 	return (SUCCESS);
 }
 
 static int	key_rotation(int key, void *param, int release)
 {
-	t_game	*game;
+	uint8_t	*game;
 
-	game = (t_game *)param;
+	game = &((t_game *)param)->move;
 	if (key == KEY_LEFT)
-		game->move.l_rotate = (release) ? 0 : 1;
+		*game = (release) ? *game ^ ROTATE_LEFT : *game | ROTATE_LEFT;
 	if (key == KEY_RIGHT)
-		game->move.r_rotate = (release) ? 0 : 1;
+		*game = (release) ? *game ^ ROTATE_RIGTH : *game | ROTATE_RIGTH;
 	return (SUCCESS);
 }
 

@@ -44,6 +44,13 @@
 # define PLAYER_PL		game->bob.plane
 # define PLAYER_SPEED	game->bob.speed
 
+# define MOVE_FRONT		0x01
+# define MOVE_BACK		0x02
+# define MOVE_LEFT		0x04
+# define MOVE_RIGHT		0x08
+# define ROTATE_LEFT	0x10
+# define ROTATE_RIGTH	0x20
+
 typedef struct		s_point
 {
 	int				x;
@@ -64,20 +71,9 @@ typedef struct		s_player
 	float			speed;
 }					t_player;
 
-typedef struct		s_move
-{
-	uint8_t			front;
-	uint8_t			back;
-	uint8_t			left;
-	uint8_t			rigth;
-	uint8_t			l_rotate;
-	uint8_t			r_rotate;
-}					t_move;
-
 typedef struct		s_game
 {
 	t_player		bob;
-	t_move			move;
 	t_point			step;
 	void			*mlx;
 	void			*window;
@@ -87,7 +83,7 @@ typedef struct		s_game
 	int				x_max;
 	int				y_max;
 	void			*texture;
-	uint8_t			draw;
+	uint8_t			move;
 }					t_game;
 
 void				game_init(t_game game);
