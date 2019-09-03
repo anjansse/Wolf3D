@@ -24,8 +24,6 @@
 # define FOV			60
 # define SCREEN_HEIGTH	900
 # define SCREEN_WIDTH	1600
-# define BLOCK_SIZE		64
-# define NB_TEXTURES	2
 
 # define FILE_CHAR_MAP		"01"
 # define FILE_CHAR_COMMENT	'#'
@@ -45,15 +43,14 @@
 */
 
 # define PP_DIMENSION	SCREEN_WIDTH * SCREEN_HEIGTH
-# define PP_CENTER		pp_center();
-# define PP_DISTANCE	(SCREEN_WIDTH / 2) / tan(FOV / 2 * M_PI / 180)
-# define PP_UNIT		FOV / SCREEN_WIDTH
 
 /*
 ** Access of structure shortcut.
 */
 
-# define PLAYER		game->bob
+# define PLAYER_POS		game->bob.pos
+# define PLAYER_DIR		game->bob.dir
+# define PLAYER_PL		game->bob.plane
 
 typedef unsigned char	t_uchar;
 
@@ -81,6 +78,7 @@ typedef struct		s_player
 typedef struct		s_game
 {
 	t_player		bob;
+	t_point			step;
 	void			*mlx;
 	void			*window;
 	void			*image;
@@ -107,6 +105,9 @@ int					key_press(int key, void *param);
 int					key_release(int key, void *param);
 
 int					point_is_wall(t_game *game, t_vector point, int *wall);
+void				point_set(t_point *point, int x, int y);
+void				vector_set(t_vector *point, double x, double y);
+void				player_init(t_player *player, int x, int y);
 
 #endif /* !WOLF_H */
 

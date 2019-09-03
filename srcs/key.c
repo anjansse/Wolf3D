@@ -58,7 +58,7 @@ int		key_fct_esc(int key, void *param, int release)
 	(void)key;
 	(void)release;
 	game = (t_game *)param;
-	free_map(game->map, (size_t)game->x_max);
+	free_map(game->map, (size_t)game->y_max);
 	mlx_destroy_image(game->mlx, game->image);
 	mlx_clear_window(game->mlx, game->window);
 	mlx_destroy_window(game->mlx, game->window);

@@ -13,7 +13,7 @@ LIB			= -L libft/ -lft \
 			  -L minilibx/ -lmlx -framework OpenGL -framework AppKit
 
 MAIN		= main.c game.c put.c key.c
-UTILITIES	= parser.c free.c
+UTILITIES	= parser.c set.c free.c
 
 FUNCTIONS	= $(addprefix srcs/, $(MAIN) $(UTILITIES))
 OBJECTS		= $(FUNCTIONS:.c=.o)
