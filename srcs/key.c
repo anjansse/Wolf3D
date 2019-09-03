@@ -8,7 +8,41 @@ int		key_fct(int key, void *param, int release)
 	return (SUCCESS);
 }
 
-int		key_left_right(int key, void *param, int release)
+static void	player_update(t_game *game, t_player *player, double x, double y)
+{
+	t_vector	point;
+
+	vector_set(&point, player->pos.x + x, player->pos.y + y);
+	if (0 <= point.x && point.x < game->x_max)
+	{
+		if (game->map[(int)floor(point.y)][(int)floor(point.x)] == 0)
+			vector_set(&(player->pos), point.x, point.y);
+	}
+}
+
+int		key_movement(int key, void *param, int release)
+{
+	double		speed;
+	t_game		*game;
+
+	(void)release;
+	game = (t_game *)param;
+	speed = SPEED_MOVEMENT * PLAYER_SPEED;
+	if (key == KEY_W)
+	{
+		player_update(game, &(game->bob), (PLAYER_DIR.x * speed), 0);
+		player_update(game, &(game->bob), 0, (PLAYER_DIR.y * speed));
+	}
+	else if (key == KEY_S)
+	{
+		player_update(game, &(game->bob), -(PLAYER_DIR.x * speed), 0);
+		player_update(game, &(game->bob), 0, -(PLAYER_DIR.y * speed));
+	}
+	game->draw = 1;
+	return (SUCCESS);
+}
+
+int		key_rotation(int key, void *param, int release)
 {
 	double		speed;
 	double		player_pl_x;
@@ -19,12 +53,12 @@ int		key_left_right(int key, void *param, int release)
 	game = (t_game *)param;
 	player_pl_x = PLAYER_PL.x;
 	player_dir_x = PLAYER_DIR.x;
-	speed = (key == KEY_LEFT) ? ROTATION_SPEED : -ROTATION_SPEED;
+	speed = (key == KEY_LEFT) ? SPEED_ROTATION : -SPEED_ROTATION;
 	PLAYER_PL.x = PLAYER_PL.x * cos(speed) - PLAYER_PL.y * sin(speed);
 	PLAYER_PL.y = player_pl_x * sin(speed) + PLAYER_PL.y * cos(speed);
 	PLAYER_DIR.x = PLAYER_DIR.x * cos(speed) - PLAYER_DIR.y * sin(speed);
 	PLAYER_DIR.y = player_dir_x * sin(speed) + PLAYER_DIR.y * cos(speed);
-	((t_game *)param)->draw = 1;
+	game->draw = 1;
 	return (SUCCESS);
 }
 
@@ -61,13 +95,13 @@ int		key_press(int key, void *param)
 	unsigned int			i;
 	static t_key_dispatch	key_d[] = {
 		{KEY_ESC, &key_fct_esc},
-		{KEY_W, &key_fct},
-		{KEY_S, &key_fct},
+		{KEY_W, &key_movement},
+		{KEY_S, &key_movement},
 		{KEY_A, &key_fct},
 		{KEY_D, &key_fct},
 		{KEY_SHIFT, &key_fct_shift},
-		{KEY_RIGHT, &key_left_right},
-		{KEY_LEFT, &key_left_right},
+		{KEY_RIGHT, &key_rotation},
+		{KEY_LEFT, &key_rotation},
 	};
 
 	i = 0;
