@@ -7,7 +7,7 @@ static int		parse_line(t_game *game, char *line, int y)
 
 	if (line == NULL)
 		return (free_map(game->map, y));
-	game->map[y] = (t_uchar *)malloc(sizeof(t_uchar) * game->x_max);
+	game->map[y] = (uint8_t *)malloc(sizeof(uint8_t) * game->x_max);
 	if (game->map[y] == NULL)
 		return (free_map(game->map, y));
 	i = 0;
@@ -50,7 +50,7 @@ static int		parse_map(int fd, t_game *game, int *nbr)
 	int		ret;
 	char	*line;
 
-	game->map = (t_uchar **)malloc(sizeof(t_uchar *) * game->y_max);
+	game->map = (uint8_t **)malloc(sizeof(uint8_t *) * game->y_max);
 	if (game->map == NULL)
 		return (FAILURE);
 	y = 0;

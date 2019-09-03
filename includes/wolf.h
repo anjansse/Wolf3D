@@ -15,15 +15,11 @@
 # define SUCCESS 0
 # define FAILURE 1
 
-/*
-** Game constraint
-**		FOV - Field Of View
-**		BLOCK_SIZE - For each element in map
-*/
-
-# define FOV			60
+# define FOV			0.60
+# define ROTATION_SPEED	0.0625
 # define SCREEN_HEIGTH	900
 # define SCREEN_WIDTH	1600
+# define PP_DIMENSION	SCREEN_WIDTH * SCREEN_HEIGTH
 
 # define FILE_CHAR_MAP		"01"
 # define FILE_CHAR_COMMENT	'#'
@@ -39,12 +35,6 @@
 # define FLOOR			0x4E4E4F
 
 /*
-** Game parameters
-*/
-
-# define PP_DIMENSION	SCREEN_WIDTH * SCREEN_HEIGTH
-
-/*
 ** Access of structure shortcut.
 */
 
@@ -52,7 +42,11 @@
 # define PLAYER_DIR		game->bob.dir
 # define PLAYER_PL		game->bob.plane
 
-typedef unsigned char	t_uchar;
+typedef struct		s_point
+{
+	int				x;
+	int				y;
+}					t_point;
 
 typedef struct		s_vector
 {
@@ -60,18 +54,11 @@ typedef struct		s_vector
 	double			y;
 }					t_vector;
 
-typedef struct		s_point
-{
-	int				x;
-	int				y;
-}					t_point;
-
 typedef struct		s_player
 {
 	t_vector		pos;
 	t_vector		dir;
 	t_vector		plane;
-	double			frame;
 	float			speed;
 }					t_player;
 
@@ -82,12 +69,12 @@ typedef struct		s_game
 	void			*mlx;
 	void			*window;
 	void			*image;
-	unsigned int	*pixels;
-	t_uchar			**map;
+	uint32_t		*pixels;
+	uint8_t			**map;
 	int				x_max;
 	int				y_max;
 	void			*texture;
-	t_uchar			draw;
+	uint8_t			draw;
 }					t_game;
 
 void				game_init(t_game game);
@@ -99,15 +86,14 @@ void				put_column(t_game *game, t_point point, size_t size, int color);
 
 int					parser(char *filename, t_game *game);
 
-int					free_map(t_uchar **map, size_t size);
+int					free_map(uint8_t **map, size_t size);
 
 int					key_press(int key, void *param);
 int					key_release(int key, void *param);
 
-int					point_is_wall(t_game *game, t_vector point, int *wall);
 void				point_set(t_point *point, int x, int y);
 void				vector_set(t_vector *point, double x, double y);
-void				player_init(t_player *player, int x, int y);
+void				player_set(t_player *player, int x, int y);
 
 #endif /* !WOLF_H */
 

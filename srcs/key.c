@@ -5,37 +5,27 @@ int		key_fct(int key, void *param, int release)
 	(void)key;
 	(void)param;
 	(void)release;
-	return (0);
+	return (SUCCESS);
 }
 
 int		key_left_right(int key, void *param, int release)
 {
-	double		rotSpeed;
-	double		player_dir;
-	double		player_plane;
-	t_player	*player;
+	double		speed;
+	double		player_pl_x;
+	double		player_dir_x;
+	t_game		*game;
 
 	(void)release;
-	player = &((t_game *)param)->bob;
-	player_dir = player->dir.x;
-	player_plane = player->plane.x;
-	rotSpeed = player->frame * 2.0;
-    if (key == KEY_RIGHT)
-		rotSpeed = -rotSpeed;
-	player->dir.x = player->dir.x * cos(rotSpeed) - player->dir.y * sin(rotSpeed);
-	player->dir.y = player_dir * sin(rotSpeed) + player->dir.y * cos(rotSpeed);
-	player->plane.x = player->plane.x * cos(rotSpeed) - player->plane.y * sin(rotSpeed);
-	player->plane.y = player_plane * sin(rotSpeed) + player->plane.y * cos(rotSpeed);
+	game = (t_game *)param;
+	player_pl_x = PLAYER_PL.x;
+	player_dir_x = PLAYER_DIR.x;
+	speed = (key == KEY_LEFT) ? ROTATION_SPEED : -ROTATION_SPEED;
+	PLAYER_PL.x = PLAYER_PL.x * cos(speed) - PLAYER_PL.y * sin(speed);
+	PLAYER_PL.y = player_pl_x * sin(speed) + PLAYER_PL.y * cos(speed);
+	PLAYER_DIR.x = PLAYER_DIR.x * cos(speed) - PLAYER_DIR.y * sin(speed);
+	PLAYER_DIR.y = player_dir_x * sin(speed) + PLAYER_DIR.y * cos(speed);
 	((t_game *)param)->draw = 1;
-	return 1;
-}
-
-int		key_fct_arrow(int key, void *param, int release)
-{
-	(void)key;
-	(void)param;
-	(void)release;
-	return (0);
+	return (SUCCESS);
 }
 
 int		key_fct_shift(int key, void *param, int release)
@@ -48,7 +38,7 @@ int		key_fct_shift(int key, void *param, int release)
 		game->bob.speed = PLAYER_SPEED_REG;
 	else
 		game->bob.speed = PLAYER_SPEED_RUN;
-	return (0);
+	return (SUCCESS);
 }
 
 int		key_fct_esc(int key, void *param, int release)
@@ -63,7 +53,7 @@ int		key_fct_esc(int key, void *param, int release)
 	mlx_clear_window(game->mlx, game->window);
 	mlx_destroy_window(game->mlx, game->window);
 	exit(EXIT_SUCCESS);
-	return (0);
+	return (SUCCESS);
 }
 
 int		key_press(int key, void *param)
@@ -71,10 +61,10 @@ int		key_press(int key, void *param)
 	unsigned int			i;
 	static t_key_dispatch	key_d[] = {
 		{KEY_ESC, &key_fct_esc},
-		{KEY_W, &key_fct_arrow},
-		{KEY_S, &key_fct_arrow},
-		{KEY_A, &key_fct_arrow},
-		{KEY_D, &key_fct_arrow},
+		{KEY_W, &key_fct},
+		{KEY_S, &key_fct},
+		{KEY_A, &key_fct},
+		{KEY_D, &key_fct},
 		{KEY_SHIFT, &key_fct_shift},
 		{KEY_RIGHT, &key_left_right},
 		{KEY_LEFT, &key_left_right},
@@ -87,7 +77,7 @@ int		key_press(int key, void *param)
 			return (key_d[i].fct(key, param, 0));
 		++i;
 	}
-	return (0);
+	return (SUCCESS);
 }
 
 int		key_release(int key, void *param)
@@ -104,7 +94,7 @@ int		key_release(int key, void *param)
 			return (key_d[i].fct(key, param, 1));
 		++i;
 	}
-	return (0);
+	return (SUCCESS);
 }
 
 /* EOF */

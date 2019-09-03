@@ -1,6 +1,6 @@
 #include "wolf.h"
 
-int		free_map(t_uchar **map, size_t size)
+int		free_map(uint8_t **map, size_t size)
 {
 	size_t	i;
 

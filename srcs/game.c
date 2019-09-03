@@ -1,18 +1,18 @@
-#include "../includes/wolf.h"
+#include "wolf.h"
 
 /*
-** Loops until finds a wall on the ray.
-*/ 
+** Find the last point of the map
+*/
 
-static t_uchar	wall_hit(t_game *game, t_point *map, t_vector *side, t_vector *delta)
+static uint8_t	wall_hit(t_game *game, t_point *map, t_vector *side, t_vector *delta)
 {
-	t_uchar 	hit;
-	t_uchar		sideMap;
+	uint8_t		hit;
+	uint8_t		range;
 
 	hit = 0;
 	while (hit == 0)
 	{
-		sideMap = (side->x < side->y) ? 0 : 1;
+		range = (side->x < side->y) ? 0 : 1;
 		if (side->x < side->y)
 		{
 			side->x += delta->x;
@@ -23,25 +23,23 @@ static t_uchar	wall_hit(t_game *game, t_point *map, t_vector *side, t_vector *de
 			side->y += delta->y;
 			map->y += game->step.y;
 		}
-		if (0 <= map->x && map->x < game->x_max && 0 <= map->y && map->y < game->y_max)
-		{
-			if (game->map[map->y][map->x] != 0)
-				hit = 1;
-		}
-		else
+		if (0 > map->x || map->x >= game->x_max
+			|| 0 > map->y || map->y >= game->y_max)
+			return (2);
+		if (game->map[map->y][map->x] != 0)
 			hit = 1;
 	}
-	return (sideMap);
+	return (range);
 }
 
 /*
 ** DDA, find distances of walls if they exists and return it.
 */
 
-static t_uchar	dda(t_game *game, t_vector *ray, t_point *map, double x)
+static uint8_t	dda(t_game *game, t_vector *ray, t_point *map, double x)
 {
-	t_uchar		sideMap;
 	double		camera;
+	uint8_t		range;
 	t_vector	side;
 	t_vector	delta;
 
@@ -50,11 +48,17 @@ static t_uchar	dda(t_game *game, t_vector *ray, t_point *map, double x)
 	vector_set(ray, PLAYER_DIR.x + PLAYER_PL.x * camera, PLAYER_DIR.y + PLAYER_PL.y * camera);
 	vector_set(&delta, fabs(1 / ray->x), fabs(1 / ray->y));
 	game->step.x = (ray->x < 0) ? -1 : 1;
-	side.x = (ray->x < 0) ? (PLAYER_POS.x - map->x) * delta.x : (map->x + 1.0 - PLAYER_POS.x) * delta.x;
 	game->step.y = (ray->y < 0) ? -1 : 1;
-	side.y = (ray->y < 0) ? (PLAYER_POS.y - map->y) * delta.y : (map->y + 1.0 - PLAYER_POS.y) * delta.y;
-	sideMap = wall_hit(game, map, &side, &delta);
-	return (sideMap);
+	if (ray->x < 0)
+		side.x = (PLAYER_POS.x - map->x) * delta.x;
+	else
+		side.x = (map->x + 1.0 - PLAYER_POS.x) * delta.x;
+	if (ray->y < 0)
+		side.y = (PLAYER_POS.y - map->y) * delta.y;
+	else
+		side.y = (map->y + 1.0 - PLAYER_POS.y) * delta.y;
+	range = wall_hit(game, map, &side, &delta);
+	return (range);
 }
 
 /*
@@ -64,21 +68,22 @@ static t_uchar	dda(t_game *game, t_vector *ray, t_point *map, double x)
 
 static void		display_walls(t_game *game)
 {
-	double		wallDistance;
-	t_vector	ray;
+	double		distance;
+	uint8_t		range;
 	t_point		map;
-	t_uchar		sideMap;
 	t_point		point;
+	t_vector	ray;
 
 	point_set(&point, 0, 0);
 	while (point.x < SCREEN_WIDTH)
 	{
-		sideMap = dda(game, &ray, &map, point.x);
-		if (sideMap == 0)
-			wallDistance = (map.x - PLAYER_POS.x + (1 - game->step.x) / 2) / ray.x;
-		else
-			wallDistance = (map.y - PLAYER_POS.y + (1 - game->step.y) / 2) / ray.y;
-		put_column(game, point, (int)(SCREEN_HEIGTH / wallDistance), 0x00FBFF);
+		range = dda(game, &ray, &map, point.x);
+		distance = SCREEN_HEIGTH;
+		if (range == 0)
+			distance = (map.x - PLAYER_POS.x + (1 - game->step.x) / 2) / ray.x;
+		else if (range == 1)
+			distance = (map.y - PLAYER_POS.y + (1 - game->step.y) / 2) / ray.y;
+		put_column(game, point, (int)(SCREEN_HEIGTH / distance), 0x00FBFF);
 		++point.x;
 	}
 }
@@ -114,9 +119,9 @@ void			game_init(t_game game)
 	game.mlx = mlx_init();
 	game.window = mlx_new_window(game.mlx, SCREEN_WIDTH, SCREEN_HEIGTH, "Wolf3D");
 	game.image = mlx_new_image(game.mlx, SCREEN_WIDTH, SCREEN_HEIGTH);
-	game.pixels = (unsigned int *)mlx_get_data_addr(game.image, &pixels, &size_line, &endian);
+	game.pixels = (uint32_t *)mlx_get_data_addr(game.image, &pixels, &size_line, &endian);
 	game.draw = 1;
-	player_init(&(game.bob), 3, 3);
+	player_set(&(game.bob), 3, 3);
 	mlx_hook(game.window, 2, 0, key_press, &game);
 	// mlx_hook(game.window, 3, 0, key_release, &game);
 	mlx_loop_hook(game.mlx, display_map, &game);
