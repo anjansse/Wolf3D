@@ -22,9 +22,8 @@ static int		parse_line(t_game *game, char *line, int y)
 	while (line[i + j] == ' ')
 		++j;
 	if (line[i + j] && line[i + j] != FILE_CHAR_COMMENT)
-		j = 0xFF;
-	ft_strdel(&line);
-	if (j == 0xFF || i != game->x_max)
+		j = -1;
+	if (j == -1 || i != game->x_max)
 		return (free_map(game->map, y + 1));
 	return (SUCCESS);
 }
@@ -40,6 +39,7 @@ static void		parse_get_line(int fd, char **str, int *nbr)
 		if (*line && *line != FILE_CHAR_COMMENT)
 			break ;
 		ft_strdel(&line);
+		line = NULL;
 	}
 	*str = line;
 }
@@ -58,7 +58,11 @@ static int		parse_map(int fd, t_game *game, int *nbr)
 	{
 		parse_get_line(fd, &line, nbr);
 		if (FAILURE == parse_line(game, line, y))
+		{
+			ft_strdel(&line);
 			return (FAILURE);
+		}
+		ft_strdel(&line);
 		line = NULL;
 		++y;
 	}
