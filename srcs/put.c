@@ -15,16 +15,15 @@ void		put_background(t_game *game, size_t size)
 	}
 }
 
-void		put_pixel(t_game *game, t_vector point, int color)
+void		put_pixel(t_game *game, t_point point, int color)
 {
-	// printf("x = %f\ty = %f\n", point.x, point.y);
-	game->pixels[((int)round(point.y) * SCREEN_WIDTH) + (int)round(point.x)] = color;
+	game->pixels[point.y * SCREEN_WIDTH + point.x] = color;
 }
 
-void		put_column(t_game *game, t_vector point, size_t size, int color)
+void		put_column(t_game *game, t_point point, size_t size, int color)
 {
 	size_t 		tmp;
-	t_vector	up_point;
+	t_point		up_point;
 
 	tmp = size / 2;
 	point.y = SCREEN_HEIGTH / 2;

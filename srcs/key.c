@@ -10,48 +10,31 @@ int		key_fct(int key, void *param, int release)
 
 int		key_left_right(int key, void *param, int release)
 {
-	(void)key;
-	(void)release;
-	t_game *game;
-
-	game = ((t_game *)param);
-	game->should_draw = 1;
-	if (key == KEY_RIGHT)
-		game->bob.theta = ((game->bob.theta + 10) > 359) ? (game->bob.theta + 10) - 360 : game->bob.theta + 10;
-	else if (key == KEY_LEFT)
-		game->bob.theta = ((game->bob.theta - 10) < 0) ? (game->bob.theta - 10) + 360 : game->bob.theta - 10;
-	return 1;
-}
-
-// int		key_left(int key, void *param, int release)
-// {
-// 	(void)key;
-// 	(void)release;
-// 	t_game *game;
-
-// 	game = ((t_game *)param);
-// 	game->should_draw = 1;
-// 	game->bob.theta = ((game->bob.theta - 10) < 0) ? (game->bob.theta - 10) + 360 : game->bob.theta - 10;
-// 	return (1);
-// }
-
-int		key_fct_arrow(int key, void *param, int release)
-{
-	t_game		*game;
+	double		rotSpeed;
+	double		player_dir;
+	double		player_plane;
 	t_player	*player;
 
 	(void)release;
-	game = (t_game *)param;
-	player = &(game->bob);
-	if (key == KEY_W)
-		point_move(game, &(player->position), 1.0, 0.0);
-	else if (key == KEY_S)
-		point_move(game, &(player->position), -1.0, 0.0);
-	else if (key == KEY_D)
-		point_move(game, &(player->position), 0.0, 1.0);
-	else if (key == KEY_A)
-		point_move(game, &(player->position), 0.0, -1.0);
-game->should_draw = 1;
+	player = &((t_game *)param)->bob;
+	player_dir = player->dir.x;
+	player_plane = player->plane.x;
+	rotSpeed = player->frame * 2.0;
+    if (key == KEY_RIGHT)
+		rotSpeed = -rotSpeed;
+	player->dir.x = player->dir.x * cos(rotSpeed) - player->dir.y * sin(rotSpeed);
+	player->dir.y = player_dir * sin(rotSpeed) + player->dir.y * cos(rotSpeed);
+	player->plane.x = player->plane.x * cos(rotSpeed) - player->plane.y * sin(rotSpeed);
+	player->plane.y = player_plane * sin(rotSpeed) + player->plane.y * cos(rotSpeed);
+	((t_game *)param)->draw = 1;
+	return 1;
+}
+
+int		key_fct_arrow(int key, void *param, int release)
+{
+	(void)key;
+	(void)param;
+	(void)release;
 	return (0);
 }
 

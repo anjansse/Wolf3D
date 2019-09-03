@@ -12,7 +12,7 @@ INCLUDES	= -I includes \
 LIB			= -L libft/ -lft \
 			  -L minilibx/ -lmlx -framework OpenGL -framework AppKit
 
-MAIN		= main.c game.c put.c key.c point.c wall.c
+MAIN		= main.c game.c put.c key.c
 UTILITIES	= parser.c free.c
 
 FUNCTIONS	= $(addprefix srcs/, $(MAIN) $(UTILITIES))

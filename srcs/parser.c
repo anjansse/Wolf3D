@@ -77,6 +77,8 @@ static int		parse_size(int fd, t_game *game, int *nbr)
 	line = NULL;
 	ret = SUCCESS;
 	parse_get_line(fd, &line, nbr);
+	if (line == NULL)
+		return (FAILURE);
 	if ((game->x_max = ft_strtoi(line, &ptr)) <= 0)
 		ret = FAILURE;
 	if (*ptr != ' ')

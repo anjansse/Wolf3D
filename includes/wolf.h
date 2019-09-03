@@ -10,6 +10,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include <sys/time.h>
 
 # define SUCCESS 0
 # define FAILURE 1
@@ -29,8 +30,8 @@
 # define FILE_CHAR_MAP		"01"
 # define FILE_CHAR_COMMENT	'#'
 
-# define PLAYER_SPEED_REG	1.0
-# define PLAYER_SPEED_RUN	1.25
+# define PLAYER_SPEED_REG	0.125
+# define PLAYER_SPEED_RUN	0.5
 
 /*
 ** Colors
@@ -62,26 +63,18 @@ typedef struct		s_vector
 	double			y;
 }					t_vector;
 
-/*
-** The Player
-** 	position: vector position on the map;
-** 	theta: angle goes from 0 to 359.9 need to remains positif
-**		   angle   0 means look on the east
-**		   angle  90 means look on the south
-**		   angle 180 means look on the west
-**		   angle 270 means look on the north
-*/
-
-// typedef struct		s_map
-// {
-// 	t_uchar			c;
-// 	int				texture;
-// }					t_map;
+typedef struct		s_point
+{
+	int				x;
+	int				y;
+}					t_point;
 
 typedef struct		s_player
 {
-	t_vector		position;
-	float			theta;
+	t_vector		pos;
+	t_vector		dir;
+	t_vector		plane;
+	double			frame;
 	float			speed;
 }					t_player;
 
@@ -96,15 +89,15 @@ typedef struct		s_game
 	int				x_max;
 	int				y_max;
 	void			*texture;
-	t_uchar			should_draw;
+	t_uchar			draw;
 }					t_game;
 
 void				game_init(t_game game);
 void				get_texture(t_game *game);
 
 void				put_background(t_game *game, size_t size);
-void				put_pixel(t_game *game, t_vector point, int color);
-void				put_column(t_game *game, t_vector point, size_t size, int color);
+void				put_pixel(t_game *game, t_point point, int color);
+void				put_column(t_game *game, t_point point, size_t size, int color);
 
 int					parser(char *filename, t_game *game);
 
@@ -114,12 +107,6 @@ int					key_press(int key, void *param);
 int					key_release(int key, void *param);
 
 int					point_is_wall(t_game *game, t_vector point, int *wall);
-void				point_set(t_vector *point, double x, double y);
-void				point_update(t_vector *point, double theta, double x, double y);
-void				point_move(t_game *game, t_vector *point, double x, double y);
-
-double				wall_distance(t_game *game, float theta);
-// double				get_distance(t_game *game, double angle)
 
 #endif /* !WOLF_H */
 
