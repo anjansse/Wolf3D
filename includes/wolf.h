@@ -22,7 +22,7 @@
 # define SCREEN_WIDTH	1600
 # define PP_DIMENSION	SCREEN_WIDTH * SCREEN_HEIGTH
 
-# define FILE_CHAR_MAP		"01"
+# define FILE_CHAR_MAP		"P01"
 # define FILE_CHAR_COMMENT	'#'
 
 # define PLAYER_SPEED_REG	0.5

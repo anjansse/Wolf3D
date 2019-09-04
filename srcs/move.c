@@ -14,8 +14,8 @@ static void	player_update(t_game *game, t_player *player, double x, double y)
 
 void		player_set(t_player *player, int x, int y)
 {
-	ft_memset(player, 0, sizeof(t_player));
-	vector_set(&(player->pos), x, y);
+	(void)x;
+	(void)y;
 	vector_set(&(player->dir), -1.0, 0.0);
 	vector_set(&(player->plane), 0.0, FOV);
 	player->speed = PLAYER_SPEED_REG;

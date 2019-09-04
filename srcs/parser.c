@@ -1,12 +1,10 @@
 #include "wolf.h"
 
-static int		parse_line(t_game *game, char *line, int y)
+static uint8_t	parse_line(t_game *game, char *line, int y, uint8_t *p)
 {
 	int		i;
 	int		j;
 
-	if (line == NULL)
-		return (free_map(game->map, y));
 	game->map[y] = (uint8_t *)malloc(sizeof(uint8_t) * game->x_max);
 	if (game->map[y] == NULL)
 		return (free_map(game->map, y));
@@ -15,7 +13,14 @@ static int		parse_line(t_game *game, char *line, int y)
 	{
 		if (ft_strchr(FILE_CHAR_MAP, line[i]) == NULL)
 			break ;
-		game->map[y][i] = line[i] - 48;
+		if (line[i] == 'P')
+		{
+			if (*p == SUCCESS)
+				return (free_map(game->map, y + 1));
+			*p = SUCCESS;
+			vector_set(&(game->bob.pos), i, y);
+		}
+		game->map[y][i] = (line[i] == 'P') ? 0 : line[i] - 48;
 		++i;
 	}
 	j = 0;
@@ -44,12 +49,13 @@ static void		parse_get_line(int fd, char **str, int *nbr)
 	*str = line;
 }
 
-static int		parse_map(int fd, t_game *game, int *nbr)
+static uint8_t	parse_map(int fd, t_game *game, int *nbr)
 {
 	int		y;
-	int		ret;
 	char	*line;
+	uint8_t	ret;
 
+	ret = FAILURE;
 	game->map = (uint8_t **)malloc(sizeof(uint8_t *) * game->y_max);
 	if (game->map == NULL)
 		return (FAILURE);
@@ -57,7 +63,7 @@ static int		parse_map(int fd, t_game *game, int *nbr)
 	while (y < game->y_max)
 	{
 		parse_get_line(fd, &line, nbr);
-		if (FAILURE == parse_line(game, line, y))
+		if (line && FAILURE == parse_line(game, line, y, &ret))
 		{
 			ft_strdel(&line);
 			return (FAILURE);
@@ -67,12 +73,16 @@ static int		parse_map(int fd, t_game *game, int *nbr)
 		++y;
 	}
 	parse_get_line(fd, &line, nbr);
-	ret = (line) ? FAILURE : SUCCESS;
+	if (ret == FAILURE || line)
+	{
+		free_map(game->map, game->y_max);
+		ret = FAILURE;
+	}
 	ft_strdel(&line);
 	return (ret);
 }
 
-static int		parse_size(int fd, t_game *game, int *nbr)
+static uint8_t	parse_size(int fd, t_game *game, int *nbr)
 {
 	int		ret;
 	char	*ptr;
@@ -100,8 +110,8 @@ static int		parse_size(int fd, t_game *game, int *nbr)
 int				parser(char *filename, t_game *game)
 {
 	int		fd;
-	int		ret;
 	int		line;
+	uint8_t	ret;
 
 	line = 0;
 	if (-1 == (fd = open(filename, O_RDONLY)))

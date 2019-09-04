@@ -26,7 +26,7 @@ static uint8_t	wall_hit(t_game *game, t_point *map, t_vector *side, t_vector *de
 		if (0 > map->x || map->x >= game->x_max
 			|| 0 > map->y || map->y >= game->y_max)
 			return (2);
-		if (game->map[map->y][map->x] != 0)
+		if (game->map[(int)floor(map->y)][(int)floor(map->x)] != 0)
 			hit = 1;
 	}
 	return (range);
@@ -80,11 +80,12 @@ static void		display_walls(t_game *game)
 		point_set(&map, PLAYER_POS.x, PLAYER_POS.y);
 		vector_set(&ray, PLAYER_DIR.x, PLAYER_DIR.y);
 		range = dda(game, &ray, &map, point.x);
-		distance = SCREEN_HEIGTH;
-		if (range == 0)
+		if (range == 0 && ray.x != 0.0)
 			distance = (map.x - PLAYER_POS.x + (1 - game->step.x) / 2) / ray.x;
-		else if (range == 1)
+		else if (range == 1 && ray.y != 0.0)
 			distance = (map.y - PLAYER_POS.y + (1 - game->step.y) / 2) / ray.y;
+		else if (range == 2)
+			distance = SCREEN_HEIGTH;
 		put_column(game, point, (int)(SCREEN_HEIGTH / distance), 0x00FBFF);
 		++point.x;
 	}
