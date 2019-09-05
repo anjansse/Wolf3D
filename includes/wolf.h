@@ -79,10 +79,12 @@ typedef struct		s_game
 	void			*window;
 	void			*image;
 	uint32_t		*pixels;
+	uint32_t		**textures;
+	size_t			size;
 	uint8_t			**map;
 	int				x_max;
 	int				y_max;
-	void			*texture;
+	void			*txt;
 	uint8_t			move;
 }					t_game;
 

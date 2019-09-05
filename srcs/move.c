@@ -2,12 +2,16 @@
 
 static void	player_update(t_game *game, t_player *player, double x, double y)
 {
+	int			x_new;
+	int			y_new;
 	t_vector	point;
 
 	vector_set(&point, player->pos.x + x, player->pos.y + y);
-	if (0 <= point.x && point.x < game->x_max)
+	x_new = (int)floor(point.x);
+	y_new = (int)floor(point.y);
+	if (0 <= x_new && x_new < game->x_max && 0 <= y_new && y_new < game->y_max)
 	{
-		if (game->map[(int)floor(point.y)][(int)floor(point.x)] == 0)
+		if (game->map[y_new][x_new] == 0)
 			vector_set(&(player->pos), point.x, point.y);
 	}
 }

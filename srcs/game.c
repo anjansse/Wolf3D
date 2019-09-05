@@ -47,13 +47,13 @@ static uint8_t	dda(t_game *game, t_vector *ray, t_point *map, double x)
 	vector_update(ray, PLAYER_PL.x * angle, PLAYER_PL.y * angle);
 	vector_set(&delta, (ray->x == 0.0) ? 1.0 : fabs(1 / ray->x), 0.0);
 	vector_set(&delta, delta.x, (ray->y == 0.0) ? 1.0 : fabs(1 / ray->y));
-	game->step.x = (ray->x < 0) ? -1 : 1;
-	game->step.y = (ray->y < 0) ? -1 : 1;
-	if (ray->x < 0)
+	game->step.x = (ray->x < 0.0) ? -1 : 1;
+	game->step.y = (ray->y < 0.0) ? -1 : 1;
+	if (ray->x < 0.0)
 		side.x = (PLAYER_POS.x - map->x) * delta.x;
 	else
 		side.x = (map->x + 1.0 - PLAYER_POS.x) * delta.x;
-	if (ray->y < 0)
+	if (ray->y < 0.0)
 		side.y = (PLAYER_POS.y - map->y) * delta.y;
 	else
 		side.y = (map->y + 1.0 - PLAYER_POS.y) * delta.y;
@@ -81,12 +81,13 @@ static void		display_walls(t_game *game)
 		vector_set(&ray, PLAYER_DIR.x, PLAYER_DIR.y);
 		range = dda(game, &ray, &map, point.x);
 		if (range == 0 && ray.x != 0.0)
-			distance = (map.x - PLAYER_POS.x + (1 - game->step.x) / 2) / ray.x;
+			distance = (map.x - PLAYER_POS.x + (1.0 - game->step.x) / 2.0) / ray.x;
 		else if (range == 1 && ray.y != 0.0)
-			distance = (map.y - PLAYER_POS.y + (1 - game->step.y) / 2) / ray.y;
+			distance = (map.y - PLAYER_POS.y + (1.0 - game->step.y) / 2.0) / ray.y;
 		else if (range == 2)
 			distance = SCREEN_HEIGTH;
-		put_column(game, point, (int)(SCREEN_HEIGTH / distance), 0x00FBFF);
+		distance = (distance <= 1.0) ? 1.0 : (distance >= SCREEN_HEIGTH) ? SCREEN_HEIGTH - 1 : distance;
+		put_column(game, point, (int)(SCREEN_HEIGTH / distance), (range == 1) ? 0x00FBFF : 0xFF00FF);
 		++point.x;
 	}
 }
@@ -113,14 +114,18 @@ int				display_map(t_game *game)
 
 void			game_init(t_game game)
 {
+	int		t;
 	int		pixels;
 	int		size_line;
 	int		endian;
 
 	game.mlx = mlx_init();
+	game.textures = (uint32_t **)malloc(sizeof(uint32_t *) * 2);
 	game.window = mlx_new_window(game.mlx, SCREEN_WIDTH, SCREEN_HEIGTH, "Wolf3D");
 	game.image = mlx_new_image(game.mlx, SCREEN_WIDTH, SCREEN_HEIGTH);
+	game.txt = mlx_xpm_file_to_image(game.mlx, "./texture/wall_txt/stone_wall.xpm", &t, &t);
 	game.pixels = (uint32_t *)mlx_get_data_addr(game.image, &pixels, &size_line, &endian);
+	game.textures[0] = (uint32_t *)mlx_get_data_addr(game.txt, &pixels, &size_line, &endian);
 	player_set(&(game.bob), 3, 3);
 	mlx_hook(game.window, 2, 0, key_press, &game);
 	mlx_hook(game.window, 3, 0, key_release, &game);
