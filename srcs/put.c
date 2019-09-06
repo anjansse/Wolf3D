@@ -8,7 +8,7 @@ void		put_background(t_game *game, size_t size)
 	while (i < size)
 	{
 		if (i < size / 2)
-			game->pixels[i] = SKY;
+			game->pixels[i] = (i % 4170 != 0) ? 0x000000 : 0xFFFFFF;
 		else
 			game->pixels[i] = FLOOR;
 		++i;
@@ -17,21 +17,26 @@ void		put_background(t_game *game, size_t size)
 
 // static int		get_text_coord(t_game *game, t_point *point)
 // {
+// 	/*
+// 	** Must calculate a scale to transform 64*64 to X*Size
+// 	** put_column prints from the middle to top&bottom.
+// 	** -> Start calculating texture from middle to top & bottom as well
+// 	** -> do that by knowinf if point.y is > SCREEN_HEIGTH / 2 or < SCREEN_HEIGTH / 2.
+// 	*/
+
+// 	(void)game;
+
 // 	int		max;
 // 	int		n;
 
-// 	max = floor(game->size / 64);
-// 	n = 1 + floor(point->y / max);
-// 	if ((point->y % max) == 0)
-// 		return ((n + 1 * 64) + point->x);
+// 	max = game->size / 64;
+// 	n = 1 + point->y / max;
 // 	return ((n * 64) + point->x);
 // }
 
 void		put_pixel(t_game *game, t_point point, int color)
 {
-	(void)color;
 	// printf("res: %d\t", point.y * SCREEN_WIDTH + point.x);
-	// game->pixels[point.y * SCREEN_WIDTH + point.x] = game->textures[0][get_text_coord(game, &point) % 4096];
 	game->pixels[point.y * SCREEN_WIDTH + point.x] = color;
 }
 

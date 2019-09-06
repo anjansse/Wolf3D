@@ -32,8 +32,8 @@
 ** Colors
 */
 
-# define SKY			0x151A4F
-# define FLOOR			0x4E4E4F
+# define SKY			0x040333
+# define FLOOR			0x4F4846
 
 /*
 ** Access of structure shortcut.
