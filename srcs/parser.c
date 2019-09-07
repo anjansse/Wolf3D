@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: anjansse <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/09/07 16:18:13 by anjansse          #+#    #+#             */
+/*   Updated: 2019/09/07 16:19:39 by anjansse         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "wolf.h"
 
 static uint8_t	parse_line(t_game *game, char *line, int y, uint8_t *p)
@@ -126,5 +138,3 @@ int				parser(char *filename, t_game *game)
 	close(fd);
 	return (ret);
 }
-
-/* EOF */

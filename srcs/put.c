@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   put.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: anjansse <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/09/07 16:19:53 by anjansse          #+#    #+#             */
+/*   Updated: 2019/09/07 16:21:39 by anjansse         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "wolf.h"
 
 void		put_background(t_game *game, size_t size)
@@ -22,7 +34,7 @@ void		put_pixel(t_game *game, t_point point, int color)
 
 void		put_column(t_game *game, t_point point, size_t size, int color)
 {
-	size_t 		tmp;
+	size_t		tmp;
 	t_point		up_point;
 
 	game->size = size;
@@ -33,9 +45,9 @@ void		put_column(t_game *game, t_point point, size_t size, int color)
 	{
 		put_pixel(game, point, color);
 		put_pixel(game, up_point, color);
-		point.y = (point.y + 1 >= SCREEN_HEIGTH) ? SCREEN_HEIGTH - 1: point.y + 1;
+		point.y = (point.y + 1 >= SCREEN_HEIGTH) \
+				? SCREEN_HEIGTH - 1 : point.y + 1;
 		up_point.y = (up_point.y - 1 <= 0) ? 0 : up_point.y - 1;
 		--tmp;
 	}
 }
-/* EOF */

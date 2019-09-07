@@ -1,10 +1,24 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   key.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: anjansse <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/09/07 16:15:28 by anjansse          #+#    #+#             */
+/*   Updated: 2019/09/07 16:25:40 by anjansse         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "wolf.h"
 
 static int	key_movement(int key, void *param, int release)
 {
 	uint8_t	*game;
+	t_game	*g;
 
-	game = &((t_game *)param)->move;
+	g = ((t_game *)param);
+	game = &(g->move);
 	if (key == KEY_W)
 		*game = (release) ? *game ^ MOVE_FRONT : *game | MOVE_FRONT;
 	if (key == KEY_S)
@@ -14,7 +28,7 @@ static int	key_movement(int key, void *param, int release)
 	if (key == KEY_D)
 		*game = (release) ? *game ^ MOVE_RIGHT : *game | MOVE_RIGHT;
 	if (key == KEY_SHIFT)
-		((t_game *)param)->bob.speed = (release) ? PLAYER_SPEED_REG : PLAYER_SPEED_RUN;
+		g->bob.speed = (release) ? PLAYER_SPEED_REG : PLAYER_SPEED_RUN;
 	return (SUCCESS);
 }
 
@@ -91,5 +105,3 @@ int			key_release(int key, void *param)
 	}
 	return (SUCCESS);
 }
-
-/* EOF */

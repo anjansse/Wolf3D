@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   wolf.h                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: anjansse <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/09/07 16:23:32 by anjansse          #+#    #+#             */
+/*   Updated: 2019/09/07 16:24:08 by anjansse         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef WOLF_H
 # define WOLF_H
 
@@ -89,11 +101,11 @@ typedef struct		s_game
 }					t_game;
 
 void				game_init(t_game game);
-void				get_texture(t_game *game);
 
 void				put_background(t_game *game, size_t size);
 void				put_pixel(t_game *game, t_point point, int color);
-void				put_column(t_game *game, t_point point, size_t size, int color);
+void				put_column(t_game *game, t_point point,\
+		size_t size, int color);
 
 int					parser(char *filename, t_game *game);
 
@@ -101,6 +113,7 @@ int					free_map(uint8_t **map, size_t size);
 
 int					key_press(int key, void *param);
 int					key_release(int key, void *param);
+int					close_window(void *param);
 
 void				point_set(t_point *point, int x, int y);
 void				vector_set(t_vector *point, double x, double y);
@@ -110,6 +123,4 @@ void				player_set(t_player *player, int x, int y);
 void				player_rotation(t_game *game);
 void				player_movement(t_game *game);
 
-#endif /* !WOLF_H */
-
-/* EOF */
+#endif

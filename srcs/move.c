@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   move.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: anjansse <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/09/07 16:17:49 by anjansse          #+#    #+#             */
+/*   Updated: 2019/09/07 16:17:54 by anjansse         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "wolf.h"
 
 static void	player_update(t_game *game, t_player *player, double x, double y)
@@ -69,5 +81,3 @@ void		player_movement(t_game *game)
 		player_update(game, &(game->bob), 0, -(PLAYER_DIR.x * speed));
 	}
 }
-
-/* EOF */
