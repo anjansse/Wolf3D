@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wolf.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anjansse <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: anjansse <anjansse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/07 16:23:32 by anjansse          #+#    #+#             */
-/*   Updated: 2019/09/07 16:24:08 by anjansse         ###   ########.fr       */
+/*   Updated: 2019/09/07 21:32:38 by anjansse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,10 @@
 
 # define SKY			0x040333
 # define FLOOR			0x4F4846
+# define WHITE			0xFFFFFF
+# define VS_GREY		0xBBBBC2
+# define S_GREY			0x94949B
+# define GREY			0x534F4F
 
 /*
 ** Access of structure shortcut.
@@ -91,16 +95,16 @@ typedef struct		s_game
 	void			*window;
 	void			*image;
 	uint32_t		*pixels;
-	uint32_t		**textures;
 	size_t			size;
+	int				color;
 	uint8_t			**map;
 	int				x_max;
 	int				y_max;
-	void			*txt;
 	uint8_t			move;
 }					t_game;
 
 void				game_init(t_game game);
+int					get_color(t_game *game, uint8_t range, t_point *map);
 
 void				put_background(t_game *game, size_t size);
 void				put_pixel(t_game *game, t_point point, int color);

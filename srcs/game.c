@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   game.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anjansse <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: anjansse <anjansse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/07 16:10:43 by anjansse          #+#    #+#             */
-/*   Updated: 2019/09/07 16:14:55 by anjansse         ###   ########.fr       */
+/*   Updated: 2019/09/07 21:29:55 by anjansse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ static uint8_t		dda(t_game *game, t_vector *ray, t_point *map, double x)
 	else
 		side.y = (map->y + 1.0 - PLAYER_POS.y) * delta.y;
 	range = wall_hit(game, map, &side, &delta);
+	game->color = get_color(game, range, map);
 	return (range);
 }
 
@@ -100,7 +101,8 @@ static void			display_walls(t_game *game)
 		else if (range == 2)
 			distance = SCREEN_HEIGTH;
 		distance = (distance <= 1.0) ? 1.0 : (distance >= SCREEN_HEIGTH) ? SCREEN_HEIGTH - 1 : distance;
-		put_column(game, point, (int)(SCREEN_HEIGTH / distance), (range == 1) ? 0xBBBBC2 : 0x94949B);
+		// put_column(game, point, (int)(SCREEN_HEIGTH / distance), (range == 1) ? 0xBBBBC2 : 0x94949B);
+		put_column(game, point, (int)(SCREEN_HEIGTH / distance), game->color);
 		++point.x;
 	}
 }
