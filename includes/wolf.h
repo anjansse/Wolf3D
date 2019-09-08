@@ -36,6 +36,7 @@
 
 # define FILE_CHAR_MAP		"P01"
 # define FILE_CHAR_COMMENT	'#'
+# define FILE_CHAR_PLAYER	'P'
 
 # define PLAYER_SPEED_REG	0.5
 # define PLAYER_SPEED_RUN	0.875

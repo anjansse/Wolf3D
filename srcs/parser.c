@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anjansse <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mjacques <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/09/07 16:18:13 by anjansse          #+#    #+#             */
-/*   Updated: 2019/09/07 16:19:39 by anjansse         ###   ########.fr       */
+/*   Created: 2019/09/07 22:36:10 by mjacques          #+#    #+#             */
+/*   Updated: 2019/09/07 22:36:11 by mjacques         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,32 +15,28 @@
 static uint8_t	parse_line(t_game *game, char *line, int y, uint8_t *p)
 {
 	int		i;
-	int		j;
 
-	game->map[y] = (uint8_t *)malloc(sizeof(uint8_t) * game->x_max);
-	if (game->map[y] == NULL)
-		return (free_map(game->map, y));
 	i = 0;
-	while (line[i] && i < game->x_max)
+	while (*line && i < game->x_max)
 	{
-		if (ft_strchr(FILE_CHAR_MAP, line[i]) == NULL)
+		if (ft_strchr(FILE_CHAR_MAP, *line) == NULL)
 			break ;
-		if (line[i] == 'P')
+		if (*line == FILE_CHAR_PLAYER)
 		{
 			if (*p == SUCCESS)
 				return (free_map(game->map, y + 1));
 			*p = SUCCESS;
 			vector_set(&(game->bob.pos), i, y);
 		}
-		game->map[y][i] = (line[i] == 'P') ? 0 : line[i] - 48;
+		game->map[y][i] = (*line == FILE_CHAR_PLAYER) ? 0 : *line - 48;
+		++line;
 		++i;
 	}
-	j = 0;
-	while (line[i + j] == ' ')
-		++j;
-	if (line[i + j] && line[i + j] != FILE_CHAR_COMMENT)
-		j = -1;
-	if (j == -1 || i != game->x_max)
+	while (*line == ' ')
+		++line;
+	if (*line && *line != FILE_CHAR_COMMENT)
+		return (free_map(game->map, y + 1));
+	if (i != game->x_max)
 		return (free_map(game->map, y + 1));
 	return (SUCCESS);
 }
@@ -68,13 +64,14 @@ static uint8_t	parse_map(int fd, t_game *game, int *nbr)
 	uint8_t	ret;
 
 	ret = FAILURE;
-	game->map = (uint8_t **)malloc(sizeof(uint8_t *) * game->y_max);
-	if (game->map == NULL)
+	if (!(game->map = (uint8_t **)malloc(sizeof(uint8_t *) * game->y_max)))
 		return (FAILURE);
 	y = 0;
 	while (y < game->y_max)
 	{
 		parse_get_line(fd, &line, nbr);
+		if (!(game->map[y] = (uint8_t *)malloc(sizeof(uint8_t) * game->x_max)))
+			return (free_map(game->map, y));
 		if (line && FAILURE == parse_line(game, line, y, &ret))
 		{
 			ft_strdel(&line);
@@ -84,13 +81,8 @@ static uint8_t	parse_map(int fd, t_game *game, int *nbr)
 		line = NULL;
 		++y;
 	}
-	parse_get_line(fd, &line, nbr);
-	if (ret == FAILURE || line)
-	{
+	if (ret == FAILURE)
 		free_map(game->map, game->y_max);
-		ret = FAILURE;
-	}
-	ft_strdel(&line);
 	return (ret);
 }
 
@@ -123,9 +115,11 @@ int				parser(char *filename, t_game *game)
 {
 	int		fd;
 	int		line;
+	char	*str;
 	uint8_t	ret;
 
 	line = 0;
+	str = NULL;
 	if (-1 == (fd = open(filename, O_RDONLY)))
 	{
 		ft_printf("ERROR: File can't be openned\n");
@@ -135,6 +129,11 @@ int				parser(char *filename, t_game *game)
 		ft_printf("ERROR: Parse error; line %d\n", line);
 	if (ret == SUCCESS && FAILURE == (ret = parse_map(fd, game, &line)))
 		ft_printf("ERROR: Parse error; line %d\n", line);
+	if (ret == SUCCESS)
+		parse_get_line(fd, &str, &line);
+	if (str)
+		ret = FAILURE;
+	ft_strdel(&str);
 	close(fd);
 	return (ret);
 }
