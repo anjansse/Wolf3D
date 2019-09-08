@@ -6,7 +6,7 @@
 /*   By: anjansse <anjansse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/07 16:10:43 by anjansse          #+#    #+#             */
-/*   Updated: 2019/09/07 21:29:55 by anjansse         ###   ########.fr       */
+/*   Updated: 2019/09/07 22:14:43 by anjansse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,12 @@ static uint8_t		wall_hit(t_game *game, t_point *map, t_vector *side,\
 		if (side->x < side->y)
 		{
 			side->x += delta->x;
-			map->x += game->step.x;
+			map->x += STEP.x;
 		}
 		else
 		{
 			side->y += delta->y;
-			map->y += game->step.y;
+			map->y += STEP.y;
 		}
 		if (0 > map->x || map->x >= game->x_max || 0 > map->y ||\
 				map->y >= game->y_max)
@@ -60,8 +60,8 @@ static uint8_t		dda(t_game *game, t_vector *ray, t_point *map, double x)
 	vector_update(ray, PLAYER_PL.x * angle, PLAYER_PL.y * angle);
 	vector_set(&delta, (ray->x == 0.0) ? 1.0 : fabs(1.0 / ray->x), 0.0);
 	vector_set(&delta, delta.x, (ray->y == 0.0) ? 1.0 : fabs(1.0 / ray->y));
-	game->step.x = (ray->x < 0.0) ? -1 : 1;
-	game->step.y = (ray->y < 0.0) ? -1 : 1;
+	STEP.x = (ray->x < 0.0) ? -1 : 1;
+	STEP.y = (ray->y < 0.0) ? -1 : 1;
 	if (ray->x < 0.0)
 		side.x = (PLAYER_POS.x - map->x) * delta.x;
 	else
@@ -95,13 +95,14 @@ static void			display_walls(t_game *game)
 		vector_set(&ray, PLAYER_DIR.x, PLAYER_DIR.y);
 		range = dda(game, &ray, &map, point.x);
 		if (range == 0 && ray.x != 0.0)
-			distance = (map.x - PLAYER_POS.x + (1.0 - game->step.x) / 2.0) / ray.x;
+			distance = (map.x - PLAYER_POS.x + (1.0 - STEP.x) / 2.0) / ray.x;
 		else if (range == 1 && ray.y != 0.0)
-			distance = (map.y - PLAYER_POS.y + (1.0 - game->step.y) / 2.0) / ray.y;
+			distance = (map.y - PLAYER_POS.y + (1.0 - STEP.y) / 2.0) / ray.y;
 		else if (range == 2)
 			distance = SCREEN_HEIGTH;
-		distance = (distance <= 1.0) ? 1.0 : (distance >= SCREEN_HEIGTH) ? SCREEN_HEIGTH - 1 : distance;
-		// put_column(game, point, (int)(SCREEN_HEIGTH / distance), (range == 1) ? 0xBBBBC2 : 0x94949B);
+		if (distance <= 1.0)
+			distance = 1.0;
+		distance = (distance >= SCREEN_HEIGTH) ? SCREEN_HEIGTH - 1 : distance;
 		put_column(game, point, (int)(SCREEN_HEIGTH / distance), game->color);
 		++point.x;
 	}

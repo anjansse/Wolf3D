@@ -6,7 +6,7 @@
 /*   By: anjansse <anjansse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/07 16:23:32 by anjansse          #+#    #+#             */
-/*   Updated: 2019/09/07 21:32:38 by anjansse         ###   ########.fr       */
+/*   Updated: 2019/09/07 22:13:22 by anjansse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@
 # define PLAYER_DIR		game->bob.dir
 # define PLAYER_PL		game->bob.plane
 # define PLAYER_SPEED	game->bob.speed
+# define STEP			game->step
 
 # define MOVE_FRONT		0x01
 # define MOVE_BACK		0x02
