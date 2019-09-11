@@ -6,7 +6,7 @@
 /*   By: anjansse <anjansse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/07 16:23:32 by anjansse          #+#    #+#             */
-/*   Updated: 2019/09/07 22:13:22 by anjansse         ###   ########.fr       */
+/*   Updated: 2019/09/10 21:44:22 by mjacques         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@
 # define SKY			0x040333
 # define FLOOR			0x4F4846
 # define WHITE			0xFFFFFF
+# define BLACK			0x000000
 # define VS_GREY		0xBBBBC2
 # define S_GREY			0x94949B
 # define GREY			0x534F4F
