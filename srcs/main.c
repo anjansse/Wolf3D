@@ -22,13 +22,19 @@ int				get_color(t_game *game, uint8_t range, t_point *map)
 		return (GREY);
 	else
 		return (VS_GREY);
-	return (0x000000);
+	return (BLACK);
 }
 
 int				close_window(void *param)
 {
-	(void)param;
-	exit(0);
+	t_game	*game;
+
+	game = (t_game *)param;
+	mlx_destroy_image(game->mlx, game->image);
+	mlx_clear_window(game->mlx, game->window);
+	mlx_destroy_window(game->mlx, game->window);
+	exit(EXIT_SUCCESS);
+	return (SUCCESS);
 }
 
 int				main(int argc, char *argv[])
@@ -38,11 +44,11 @@ int				main(int argc, char *argv[])
 	if (argc != 2)
 	{
 		ft_putendl("usage: ./wolf3d <map>");
-		return (EXIT_FAILURE);
+		return (FAILURE);
 	}
 	ft_memset(&game, 0, sizeof(t_game));
-	if (EXIT_FAILURE == parser(argv[1], &game))
-		return (EXIT_FAILURE);
+	if (FAILURE == parser(argv[1], &game))
+		return (FAILURE);
 	game_init(game);
-	return (EXIT_SUCCESS);
+	return (SUCCESS);
 }

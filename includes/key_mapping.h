@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   key_mapping.h                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mjacques <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/09/07 22:35:56 by mjacques          #+#    #+#             */
+/*   Updated: 2019/09/07 22:35:57 by mjacques         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef KEY_MAPPING_H
 # define KEY_MAPPING_H
 
@@ -55,14 +67,12 @@
 # define KEY_Y		16
 # define KEY_Z		6
 
-typedef struct			s_key_dispatch
+typedef struct		s_key_dispatch
 {
-	int					key;
-	int					(*fct)(int key, void *param, int release);
-}						t_key_dispatch;
+	int				key;
+	int				(*fct)(int key, void *param, int release);
+}					t_key_dispatch;
 
-int						key_handle(int key, void *param);
+int					key_handle(int key, void *param);
 
-#endif /* !KEY_MAPPING_H */
-
-/* EOF */
+#endif

@@ -6,7 +6,7 @@
 /*   By: anjansse <anjansse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/07 16:23:32 by anjansse          #+#    #+#             */
-/*   Updated: 2019/09/19 10:24:10 by anjansse         ###   ########.fr       */
+/*   Updated: 2019/09/19 11:06:41 by anjansse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@
 
 # define FILE_CHAR_MAP		"P01"
 # define FILE_CHAR_COMMENT	'#'
+# define FILE_CHAR_PLAYER	'P'
 
 # define PLAYER_SPEED_REG	0.5
 # define PLAYER_SPEED_RUN	0.875
@@ -47,6 +48,7 @@
 # define SKY			0x040333
 # define FLOOR			0x4F4846
 # define WHITE			0xFFFFFF
+# define BLACK			0x000000
 # define VS_GREY		0xBBBBC2
 # define S_GREY			0x94949B
 # define GREY			0x534F4F
