@@ -12,6 +12,21 @@
 
 #include "wolf.h"
 
+static void		parse_get_line(int fd, char **str, int *nbr)
+{
+	char	*line;
+
+	line = NULL;
+	while (get_next_line(fd, &line) > 0 && line)
+	{
+		++(*nbr);
+		if (*line && *line != FILE_CHAR_COMMENT)
+			break ;
+		ft_strdel(&line);
+	}
+	*str = line;
+}
+
 static uint8_t	parse_line(t_game *game, char *line, int y, uint8_t *p)
 {
 	int		i;
@@ -24,7 +39,7 @@ static uint8_t	parse_line(t_game *game, char *line, int y, uint8_t *p)
 		if (*line == FILE_CHAR_PLAYER)
 		{
 			if (*p == SUCCESS)
-				return (free_map(game->map, y + 1));
+				return (FAILURE);
 			*p = SUCCESS;
 			vector_set(&(game->bob.pos), i, y);
 		}
@@ -32,29 +47,13 @@ static uint8_t	parse_line(t_game *game, char *line, int y, uint8_t *p)
 		++line;
 		++i;
 	}
-	while (*line == ' ')
+	while (*line && *line == ' ')
 		++line;
 	if (*line && *line != FILE_CHAR_COMMENT)
-		return (free_map(game->map, y + 1));
+		return (FAILURE);
 	if (i != game->x_max)
-		return (free_map(game->map, y + 1));
+		return (FAILURE);
 	return (SUCCESS);
-}
-
-static void		parse_get_line(int fd, char **str, int *nbr)
-{
-	char	*line;
-
-	line = NULL;
-	while (get_next_line(fd, &line) > 0 && line)
-	{
-		++(*nbr);
-		if (*line && *line != FILE_CHAR_COMMENT)
-			break ;
-		ft_strdel(&line);
-		line = NULL;
-	}
-	*str = line;
 }
 
 static uint8_t	parse_map(int fd, t_game *game, int *nbr)
@@ -62,34 +61,32 @@ static uint8_t	parse_map(int fd, t_game *game, int *nbr)
 	int		y;
 	char	*line;
 	uint8_t	ret;
+	uint8_t	player;
 
-	ret = FAILURE;
+	ret = SUCCESS;
+	player = FAILURE;
 	if (!(game->map = (uint8_t **)malloc(sizeof(uint8_t *) * game->y_max)))
 		return (FAILURE);
 	y = 0;
-	while (y < game->y_max)
+	while (SUCCESS == ret && y < game->y_max)
 	{
-		parse_get_line(fd, &line, nbr);
 		if (!(game->map[y] = (uint8_t *)malloc(sizeof(uint8_t) * game->x_max)))
 			return (free_map(game->map, y));
-		if (line && FAILURE == parse_line(game, line, y, &ret))
-		{
-			ft_strdel(&line);
-			return (FAILURE);
-		}
+		parse_get_line(fd, &line, nbr);
+		if (line)
+			ret = parse_line(game, line, y, &player);
 		ft_strdel(&line);
-		line = NULL;
 		++y;
 	}
-	if (ret == FAILURE)
-		free_map(game->map, game->y_max);
-	return (ret);
+	if (FAILURE == player || FAILURE == ret)
+		free_map(game->map, y);
+	return ((FAILURE == player) ? FAILURE : ret);
 }
 
 static uint8_t	parse_size(int fd, t_game *game, int *nbr)
 {
 	int		ret;
-	char	*ptr;
+	char	*tmp;
 	char	*line;
 
 	line = NULL;
@@ -97,15 +94,15 @@ static uint8_t	parse_size(int fd, t_game *game, int *nbr)
 	parse_get_line(fd, &line, nbr);
 	if (line == NULL)
 		return (FAILURE);
-	if ((game->x_max = ft_strtoi(line, &ptr)) <= 0)
+	if ((game->x_max = ft_strtoi(line, &tmp)) <= 0)
 		ret = FAILURE;
-	if (*ptr != ' ')
+	if (*tmp != ' ')
 		ret = FAILURE;
-	if ((game->y_max = ft_strtoi(ptr, &ptr)) <= 0)
+	if ((game->y_max = ft_strtoi(tmp, &tmp)) <= 0)
 		ret = FAILURE;
-	while (*ptr && *ptr == ' ')
-		++ptr;
-	if (*ptr && *ptr != FILE_CHAR_COMMENT)
+	while (*tmp && *tmp == ' ')
+		++tmp;
+	if (*tmp && *tmp != FILE_CHAR_COMMENT)
 		ret = FAILURE;
 	ft_strdel(&line);
 	return (ret);
@@ -127,9 +124,9 @@ int				parser(char *filename, t_game *game)
 	}
 	if (FAILURE == (ret = parse_size(fd, game, &line)))
 		ft_printf("ERROR: Parse error; line %d\n", line);
-	if (ret == SUCCESS && FAILURE == (ret = parse_map(fd, game, &line)))
+	if (SUCCESS == ret && FAILURE == (ret = parse_map(fd, game, &line)))
 		ft_printf("ERROR: Parse error; line %d\n", line);
-	if (ret == SUCCESS)
+	if (SUCCESS == ret)
 		parse_get_line(fd, &str, &line);
 	if (str)
 		ret = FAILURE;
