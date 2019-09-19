@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   key.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anjansse <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: anjansse <anjansse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/07 16:15:28 by anjansse          #+#    #+#             */
-/*   Updated: 2019/09/07 16:25:40 by anjansse         ###   ########.fr       */
+/*   Updated: 2019/09/19 10:45:54 by anjansse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,13 +34,19 @@ static int	key_movement(int key, void *param, int release)
 
 static int	key_rotation(int key, void *param, int release)
 {
-	uint8_t	*game;
+	uint32_t	*view;
+	uint8_t		*game;
 
 	game = &((t_game *)param)->move;
+	view = &((t_game *)param)->view;
 	if (key == KEY_LEFT)
 		*game = (release) ? *game ^ ROTATE_LEFT : *game | ROTATE_LEFT;
 	if (key == KEY_RIGHT)
 		*game = (release) ? *game ^ ROTATE_RIGTH : *game | ROTATE_RIGTH;
+	if (key == KEY_UP)
+		*view = (*view - 10 > 0) ? *view - 10 : 0 + 10;
+	if (key == KEY_DOWN)
+		*view = (*view + 10 < SCREEN_HEIGTH) ? *view + 10 : SCREEN_HEIGTH - 10;
 	return (SUCCESS);
 }
 
@@ -69,6 +75,8 @@ int			key_press(int key, void *param)
 		{KEY_A, &key_movement},
 		{KEY_D, &key_movement},
 		{KEY_LEFT, &key_rotation},
+		{KEY_UP, &key_rotation},
+		{KEY_DOWN, &key_rotation},
 		{KEY_RIGHT, &key_rotation},
 		{KEY_SHIFT, &key_movement}
 	};
@@ -93,6 +101,8 @@ int			key_release(int key, void *param)
 		{KEY_D, &key_movement},
 		{KEY_LEFT, &key_rotation},
 		{KEY_RIGHT, &key_rotation},
+		{KEY_UP, &key_rotation},
+		{KEY_DOWN, &key_rotation},
 		{KEY_SHIFT, &key_movement}
 	};
 

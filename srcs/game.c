@@ -6,7 +6,7 @@
 /*   By: anjansse <anjansse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/07 16:10:43 by anjansse          #+#    #+#             */
-/*   Updated: 2019/09/07 22:14:43 by anjansse         ###   ########.fr       */
+/*   Updated: 2019/09/19 11:04:43 by anjansse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,9 +100,10 @@ static void			display_walls(t_game *game)
 			distance = (map.y - PLAYER_POS.y + (1.0 - STEP.y) / 2.0) / ray.y;
 		else if (range == 2)
 			distance = SCREEN_HEIGTH;
-		if (distance <= 1.0)
-			distance = 1.0;
-		distance = (distance >= SCREEN_HEIGTH) ? SCREEN_HEIGTH - 1 : distance;
+		/* LIMITES QUE J'AI ENLEVEE CAR RENVOYAIT UNE TAILLE ERRONEE */
+		// if (distance <= 1.0)
+		// 	distance = 1.0;
+		// distance = (distance >= SCREEN_HEIGTH) ? SCREEN_HEIGTH - 1 : distance;
 		put_column(game, point, (int)(SCREEN_HEIGTH / distance), game->color);
 		++point.x;
 	}
@@ -140,6 +141,7 @@ void				game_init(t_game game)
 	game.image = mlx_new_image(game.mlx, SCREEN_WIDTH, SCREEN_HEIGTH);
 	game.pixels = (uint32_t *)mlx_get_data_addr(game.image, &pixels,\
 			&size_line, &endian);
+	game.view = SCREEN_HEIGTH / 2;
 	player_set(&(game.bob), 3, 3);
 	mlx_hook(game.window, 2, 0, key_press, &game);
 	mlx_hook(game.window, 3, 0, key_release, &game);

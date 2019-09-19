@@ -6,7 +6,7 @@
 /*   By: anjansse <anjansse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/07 16:19:53 by anjansse          #+#    #+#             */
-/*   Updated: 2019/09/07 21:28:04 by anjansse         ###   ########.fr       */
+/*   Updated: 2019/09/19 10:55:53 by anjansse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void		put_background(t_game *game, size_t size)
 	i = 0;
 	while (i < size)
 	{
-		if (i < size / 2)
+		if (i < game->view * SCREEN_WIDTH)
 			game->pixels[i] = (i % 4545 != 0) ? 0x000000 : 0xFFFFFF;
 		else
 			game->pixels[i] = FLOOR;
@@ -39,7 +39,7 @@ void		put_column(t_game *game, t_point point, size_t size, int color)
 
 	game->size = size;
 	tmp = size / 2;
-	point.y = SCREEN_HEIGTH / 2;
+	point.y = game->view;
 	up_point = point;
 	while (tmp)
 	{

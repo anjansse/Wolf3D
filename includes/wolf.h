@@ -6,7 +6,7 @@
 /*   By: anjansse <anjansse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/07 16:23:32 by anjansse          #+#    #+#             */
-/*   Updated: 2019/09/07 22:13:22 by anjansse         ###   ########.fr       */
+/*   Updated: 2019/09/19 10:24:10 by anjansse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,7 @@ typedef struct		s_game
 	int				x_max;
 	int				y_max;
 	uint8_t			move;
+	uint32_t		view;	
 }					t_game;
 
 void				game_init(t_game game);
