@@ -6,7 +6,7 @@
 /*   By: anjansse <anjansse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/07 16:10:43 by anjansse          #+#    #+#             */
-/*   Updated: 2019/09/19 11:04:43 by anjansse         ###   ########.fr       */
+/*   Updated: 2019/09/19 18:08:40 by anjansse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,10 +100,8 @@ static void			display_walls(t_game *game)
 			distance = (map.y - PLAYER_POS.y + (1.0 - STEP.y) / 2.0) / ray.y;
 		else if (range == 2)
 			distance = SCREEN_HEIGTH;
-		/* LIMITES QUE J'AI ENLEVEE CAR RENVOYAIT UNE TAILLE ERRONEE */
-		// if (distance <= 1.0)
-		// 	distance = 1.0;
-		// distance = (distance >= SCREEN_HEIGTH) ? SCREEN_HEIGTH - 1 : distance;
+		if (distance < 0.0)
+			distance = 0.0;
 		put_column(game, point, (int)(SCREEN_HEIGTH / distance), game->color);
 		++point.x;
 	}
@@ -116,6 +114,7 @@ static void			display_walls(t_game *game)
 
 int					display_map(t_game *game)
 {
+	mlx_clear_window(game->mlx, game->window);
 	player_rotation(game);
 	player_movement(game);
 	put_background(game, PP_DIMENSION);

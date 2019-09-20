@@ -6,7 +6,7 @@
 /*   By: anjansse <anjansse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/07 16:23:32 by anjansse          #+#    #+#             */
-/*   Updated: 2019/09/19 11:06:41 by anjansse         ###   ########.fr       */
+/*   Updated: 2019/09/19 18:01:19 by anjansse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@
 # define FOV			0.60
 # define SPEED_ROTATION	0.0625
 # define SPEED_MOVEMENT	0.125
-# define SCREEN_HEIGTH	900
-# define SCREEN_WIDTH	1600
+# define SCREEN_HEIGTH	600
+# define SCREEN_WIDTH	1000
 # define PP_DIMENSION	SCREEN_WIDTH * SCREEN_HEIGTH
 
 # define FILE_CHAR_MAP		"P01"
