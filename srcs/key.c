@@ -6,7 +6,7 @@
 /*   By: anjansse <anjansse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/07 16:15:28 by anjansse          #+#    #+#             */
-/*   Updated: 2019/09/19 17:45:00 by anjansse         ###   ########.fr       */
+/*   Updated: 2019/09/21 10:51:46 by anjansse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,9 @@ static int	key_rotation(int key, void *param, int release)
 		*game = (release) ? *game ^ ROTATE_LEFT : *game | ROTATE_LEFT;
 	if (key == KEY_RIGHT)
 		*game = (release) ? *game ^ ROTATE_RIGTH : *game | ROTATE_RIGTH;
-	if (key == KEY_UP)
-		*view = (*view - 15 > 0) ? *view - 15 : 0 + 15;
 	if (key == KEY_DOWN)
+		*view = (*view - 15 > 0) ? *view - 15 : 0 + 15;
+	if (key == KEY_UP)
 		*view = (*view + 15 < SCREEN_HEIGTH) ? *view + 15 : SCREEN_HEIGTH - 15;
 	return (SUCCESS);
 }
