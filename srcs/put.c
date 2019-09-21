@@ -6,7 +6,7 @@
 /*   By: anjansse <anjansse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/07 16:19:53 by anjansse          #+#    #+#             */
-/*   Updated: 2019/09/19 18:07:55 by anjansse         ###   ########.fr       */
+/*   Updated: 2019/09/21 10:48:06 by anjansse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void		put_column(t_game *game, t_point point, size_t size, int color)
 	size_t		tmp;
 	t_point		up_point;
 
-	size = (size > SCREEN_HEIGTH * 2) ? SCREEN_HEIGTH * 2: size;
+	size = (size > SCREEN_HEIGTH * 2) ? SCREEN_HEIGTH * 2 : size;
 	game->size = size;
 	tmp = size / 2;
 	point.y = game->view;
