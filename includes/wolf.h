@@ -99,12 +99,12 @@ typedef struct		s_game
 	void			*image;
 	uint32_t		*pixels;
 	size_t			size;
-	int				color;
+	uint32_t		view;
+	uint32_t		color;
 	uint8_t			**map;
 	int				x_max;
 	int				y_max;
 	uint8_t			move;
-	uint32_t		view;
 }					t_game;
 
 void				game_init(t_game game);
