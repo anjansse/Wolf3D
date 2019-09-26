@@ -6,7 +6,7 @@
 /*   By: anjansse <anjansse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/07 16:19:53 by anjansse          #+#    #+#             */
-/*   Updated: 2019/09/21 10:48:06 by anjansse         ###   ########.fr       */
+/*   Updated: 2019/09/25 20:05:00 by anjansse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void		put_background(t_game *game, size_t size)
 	while (i < size)
 	{
 		if (i < game->view * SCREEN_WIDTH)
-			game->pixels[i] = (i % 1894 != 0) ? 0x000000 : 0xFFFFFF;
+			game->pixels[i] = (i % 4545 != 0) ? 0x000000 : 0xFFFFFF;
 		else
 			game->pixels[i] = FLOOR;
 		++i;
